@@ -43,7 +43,7 @@
 */
 
 function draw(what, parent, settings){
-  let create = parent.selectAll(what),
+  var create = parent.selectAll(what),
     args = settings.data,
     keys = Object.keys(settings.is),
     len = keys.length;
@@ -54,9 +54,48 @@ function draw(what, parent, settings){
 
   create = create.data.apply(create, args);
 
-  for (let i = 0; i < len; i++){
+  for (var i = 0; i < len; i++){
     create.call(settings.is[ keys[i] ]);  
   }
+  return create;
 }
 
-export { draw };
+/**
+* BlankSVG -> Creates a new, blank SVG to work on. follows d3 
+* conventions of calculating the sizy of the canvas
+*
+* @param{Number} (width) -> value of width
+* @param{Number} (height) -> value of height
+* @param{Object} (margin) -> object of top, bottom, left, right of Numbers
+* @param{String} (select) -> the id or class of the DOM selection
+* 
+* example:
+* const margin = {top: 19.5, right: 19.5, bottom: 19.5, left: 39.5},
+*     width = 960 - margin.right,
+*     height = 500 - margin.top - margin.bottom;
+* 
+* svg = new BlankSVG(width, height, margin, '#chart')
+*/
+function BlankSVG(width, height, margin, select) {
+    select = select !== undefined ? select : 'body';
+
+    return d3.select(select)
+        .append("svg")
+        .attr({
+            "width": (width + margin.left + margin.right),
+            "height": (height + margin.top + margin.bottom)
+        })
+      .append("g")
+        .attr({
+            "transform": "translate(" 
+                + margin.left 
+                + "," 
+                + margin.top 
+                + ")"
+        });
+}
+
+module.exports = {
+  draw:draw,
+  BlankSVG:BlankSVG
+}
