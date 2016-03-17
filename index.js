@@ -133,26 +133,7 @@ function dimensions(sizing) {
 * 
 * svg = new BlankSVG(width, height, margin, '#chart')
 */
-function BlankSVG(width, height, margin, select) {
-    select = select !== undefined ? select : 'body';
 
-    return d3.select(select)
-        .append("svg")
-        .attr({
-            "width": (width + margin.left + margin.right),
-            "height": (height + margin.top + margin.bottom)
-        })
-      .append("g")
-        .attr({
-            "transform": "translate(" 
-                + margin.left 
-                + "," 
-                + margin.top 
-                + ")"
-        });
-}
-//!!!!!!!!!! this needs to be fixed make sure this works cross
-// all samples
 function blankSVG(d3local, size, select) {
     select = select !== undefined ? select : 'body';
 
@@ -183,6 +164,5 @@ function blankSVG(d3local, size, select) {
 module.exports = {
   draw:draw,
   dimensions:dimensions,
-  BlankSVG:BlankSVG,
   blankSVG:blankSVG
 }
