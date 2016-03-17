@@ -113,7 +113,7 @@ function dimensions(sizing) {
         left : 0,
       }
     }
-    return baseSize(dim[0], dim[1], dim[2].top, dim[2].right, 
+    return baseDimensions(dim[0], dim[1], dim[2].top, dim[2].right, 
                     dim[2].bottom,  dim[2].left);
 }
 
