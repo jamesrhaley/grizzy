@@ -61,6 +61,63 @@ function draw(what, parent, settings){
 }
 
 /**
+* dimensions -> follows the general d3 sizing rules with margins
+* @param{Object} (sizing) -> object of width, heigh, 
+* margin{top,right,bottom,left}. if margin is left off then all
+* margins are set to zero.
+* example:
+* var SIZE = dimensions({
+*     width : window.innerWidth - 600,
+*     height : window.innerHeight*.9,
+*     margin:{top: 10, right: 30, bottom: 10, left: 20}
+* });
+*/
+function baseDimensions(width, height) {
+      var margintop = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
+      var marginright = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
+      var marginBottom = arguments.length <= 4 || arguments[4] === undefined ? 0 : arguments[4];
+      var marginLeft = arguments.length <= 5 || arguments[5] === undefined ? 0 : arguments[5];
+
+      var sizeObject = {
+          margin : {
+              top: margintop, 
+              right: marginright,
+              bottom: marginBottom,
+              left: marginLeft
+          },
+          width : width - marginLeft - marginright,
+          height : height - margintop - marginBottom
+      }
+      return sizeObject;
+  }
+
+function dimensions(sizing) {
+    var props = ['width', 'height', 'margin'];
+    var dim = {};
+
+    props.forEach(function(value, index) {
+      for (prop in sizing) {
+        if (sizing.hasOwnProperty(value)) {
+          dim[index] = sizing[value]
+        } else {
+          dim[index] = undefined
+        }
+      }
+    })
+    
+    if (dim[2] === undefined) {
+      dim[2] = {
+        top : 0,
+        right : 0,
+        bottom : 0,
+        left : 0,
+      }
+    }
+    return baseSize(dim[0], dim[1], dim[2].top, dim[2].right, 
+                    dim[2].bottom,  dim[2].left);
+}
+
+/**
 * BlankSVG -> Creates a new, blank SVG to work on. follows d3 
 * conventions of calculating the sizy of the canvas
 *
@@ -94,8 +151,38 @@ function BlankSVG(width, height, margin, select) {
                 + ")"
         });
 }
+//!!!!!!!!!! this needs to be fixed make sure this works cross
+// all samples
+function blankSVG(d3local, size, select) {
+    select = select !== undefined ? select : 'body';
+
+    return d3local.select(select)
+        .append("svg")
+        .attr({
+            "width": (
+                size.width 
+                + size.margin.left 
+                + size.margin.right
+            ),
+            "height": (
+                size.height
+                + size.margin.top
+                + size.margin.bottom
+            )
+        })
+      .append("g")
+        .attr({
+            "transform": "translate(" 
+                + size.margin.left 
+                + "," 
+                + size.margin.top 
+                + ")"
+        });
+}
 
 module.exports = {
   draw:draw,
-  BlankSVG:BlankSVG
+  dimensions:dimensions,
+  BlankSVG:BlankSVG,
+  blankSVG:blankSVG
 }
