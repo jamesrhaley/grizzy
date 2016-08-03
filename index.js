@@ -1,6 +1,6 @@
 /**
  * draw -> manages the heavy lifing of d3 by creating  a reusable
- * pattern to create graphics.  Note if there is note setting.data
+ * pattern to create graphics.  Note: if setting.data is `false`
  * parent object will bind only
  *
  * @param{String} (what) -> what will be picked in the selection 
