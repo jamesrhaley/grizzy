@@ -1,9 +1,0 @@
-creating an outline for update enter exit for canvas or webgl.
-
-This will be tied into the scheduling system already created.
-
-There should be a master list of data that tells what is in update what is in exit and what is in enter.  This should be fixed and not mutated
-
-There should be a array of what is currently in the visual that has object removed and added appropriately and mutated.
-
-maps will be used two reference the two objects
