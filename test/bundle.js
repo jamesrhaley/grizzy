@@ -8526,6 +8526,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	var drawSchedule = __webpack_require__(50).drawSchedule;
+	console.log(drawSchedule);
 	describe('grizzy.dimensions', function () {
 		var baseDimensions = {
 			width: 800,
@@ -21194,6 +21196,664 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	process.umask = function() { return 0; };
 
+
+/***/ },
+/* 50 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var Rx = __webpack_require__(47);
+
+	var _require = __webpack_require__(51);
+
+	var queueSubject = _require.queueSubject;
+
+	var _require2 = __webpack_require__(55);
+
+	var LOAD = _require2.LOAD;
+	var BIND = _require2.BIND;
+	var PRE_BIND = _require2.PRE_BIND;
+
+	/**
+	 * drawSchedule -> manages the heavy lifing of d3 by creating  a 
+	 * reusable pattern to create graphics.  Note: if setting.data is 
+	 * `false` parent object will bind only.  Should be returned in a 
+	 * function.
+	 *
+	 * @param{String} (what) -> what will be picked in the selection 
+	 * @param{Object::Array} (parent) -> the svg that will be render new
+	 *   images
+	 * @parm{Object} (settings) -> All of the functionality of the view of
+	 *   the d3.  must include properties data, and is.
+	 *
+	 * example: 
+	 * (parentObject, data) => {
+	 *     return drawSchedule("rect.range", parentObject, {
+	 *       data: data,
+	 *       is : {
+	 *         enter : (selection) => {
+	 *           return selection.enter().append("rect")
+	 *             .attr({
+	 *               "class": (d, i) => "range s" + i,
+	 *               "width": w0,
+	 *               "height": height,
+	 *               "x": reverse ? lastScale : 0
+	 *             })
+	 *           .transition()
+	 *             .duration(duration)
+	 *             .attr({
+	 *               "width": w1,
+	 *               "x": reverse ? currentScale : 0
+	 *             });
+	 *         },
+	 *         update : (selection) => {
+	 *           return selection.transition()
+	 *             .duration(duration)
+	 *             .attr({
+	 *               "x": reverse ? currentScale : 0,
+	 *               "width": w1,
+	 *               "height": height
+	 *             });
+	 *         },
+	 *         exit : (selection) => {
+	 *           return selection.exit().remove();
+	 *         }
+	 *       }
+	 *     });
+	 *  }
+	 */
+
+	function drawSchedule(what, parent, settings) {
+	  var data = settings.data,
+	      create = data === false ? parent : parent.selectAll(what),
+	      keys = Object.keys(settings.is),
+	      len = keys.length,
+	      is = settings.is,
+	      applyArgs = undefined,
+	      dataBinder = void 0;
+
+	  if (!(data instanceof Array && data[1] instanceof Function)) {
+	    applyArgs = [data];
+	  } else {
+	    applyArgs = data;
+	  }
+
+	  if (data) {
+	    dataBinder = function dataBinder() {
+	      return create.data.apply(create, applyArgs);
+	    };
+	  } else {
+	    dataBinder = function dataBinder() {
+	      return create;
+	    };
+	  }
+
+	  return {
+	    type: PRE_BIND,
+	    // if problems up comment this out
+	    // parent: create,
+	    dataBinder: dataBinder,
+	    is: is,
+	    keys: keys,
+	    len: len
+	  };
+	}
+
+	/**
+	 * load-> create a series of transition to occur in your visualization. 
+	 * Each one will happen after the pervious one completes.
+	 *  
+	 * @param{Object} (transitions) -> any number of object created by
+	 *   a drawSchedule function
+	 */
+	function load() {
+	  for (var _len = arguments.length, transitions = Array(_len), _key = 0; _key < _len; _key++) {
+	    transitions[_key] = arguments[_key];
+	  }
+
+	  queueSubject.onNext({
+	    type: LOAD,
+	    time: Date.now(),
+	    transitions: transitions
+	  });
+
+	  return transitions;
+	}
+
+	module.exports = { drawSchedule: drawSchedule, load: load };
+
+/***/ },
+/* 51 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+	var Rx = __webpack_require__(47);
+
+	var _require = __webpack_require__(52);
+
+	var Queue = _require.Queue;
+	var isEmpty = _require.isEmpty;
+
+	var _require2 = __webpack_require__(53);
+
+	var queueSubject = _require2.queueSubject;
+	var scheduleSubject = _require2.scheduleSubject;
+
+	var _require3 = __webpack_require__(54);
+
+	var transitionState = _require3.transitionState;
+	var dataModel = _require3.dataModel;
+
+	var _require4 = __webpack_require__(56);
+
+	var views = _require4.views;
+
+	var _require5 = __webpack_require__(55);
+
+	var LOAD = _require5.LOAD;
+	var PRE_BIND = _require5.PRE_BIND;
+	var FINISH = _require5.FINISH;
+
+
+	var masterTime = 0;
+
+	// filters out process that should be canceled if a user
+	// has updated the data of the application
+	var ignoreOld = function ignoreOld(x) {
+	  return x.time === masterTime;
+	};
+
+	var backFromRenderStream = scheduleSubject.filter(ignoreOld);
+
+	var stagedState = {
+	  staged: {},
+	  queue: new Queue(),
+	  time: 0
+	};
+
+	function queueModel(acc, curr) {
+	  if (curr.type === LOAD) {
+	    var _ret = function () {
+	      var Q = new Queue();
+
+	      masterTime = curr.time;
+
+	      curr.transitions.forEach(function (transition) {
+	        Q.enqueue(transition);
+	      });
+
+	      return {
+	        v: {
+	          staged: Q.dequeue(),
+	          queue: Q,
+	          time: curr.time
+	        }
+	      };
+	    }();
+
+	    if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+	  } else if (curr.type === FINISH) {
+	    var _Q = acc.queue;
+
+	    if (_Q.length > 0) {
+	      return {
+	        staged: _Q.dequeue(),
+	        queue: _Q,
+	        time: acc.time
+	      };
+	    } else {
+	      return stagedState;
+	    }
+	  }
+	}
+
+	// this will also have a step to call for another 
+	// dequeued item when all transitions are done
+	// for clarity startWith is used with a templete of
+	// what the model is.  Skip prevents that empty model
+	// from being streamed to the next stage.
+	var queueStream = queueSubject.startWith(stagedState).scan(queueModel).skip(1).filter(function (obj) {
+	  return !isEmpty(obj.staged);
+	});
+
+	// shape object if it is a plain object
+	var singleStream = queueStream.filter(function (staged) {
+	  return !Array.isArray(staged);
+	}).map(function (preTransition) {
+	  var pre = preTransition.staged;
+	  var transitions = pre.is;
+	  var keys = Object.keys(transitions);
+	  var is = {};
+
+	  keys.forEach(function (key) {
+	    is[key] = [transitions[key]];
+	  });
+
+	  var post = Object.assign({}, pre, {
+	    time: preTransition.time,
+	    dataBinder: [pre.dataBinder],
+	    is: is
+	  });
+
+	  return post;
+	});
+
+	var mergeSubject = Rx.Observable.merge(singleStream, backFromRenderStream);
+
+	mergeSubject.startWith(transitionState).scan(dataModel).skip(1)
+	// if transitions are still out, filter stops
+	// state from returning
+	.filter(function (state) {
+	  return !state.flag;
+	}).subscribe(function (transitionStage) {
+	  views(transitionStage);
+	});
+
+	module.exports = { queueSubject: queueSubject };
+
+/***/ },
+/* 52 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	* pick -> shorthand for document.querySelector(selector)
+	*/
+	var pick = function pick(selector) {
+	  return document.querySelector(selector);
+	};
+
+	/**
+	* indexed -> takes a list of indices and gets them from a 
+	*   collection
+	* @param{Array::Numbers} (indices) -> index list
+	* @param{Array::Arrays/Objects} (collection) -> collection to get 
+	*   values
+	* @param{Function} (getProperty) -> callback to get value from
+	*   collection
+	* @return{Array/Array::Objects/Array::Array}
+	*/
+	function indexed(indices, collection, getProperty) {
+	  var request = new Array(indices.length);
+
+	  if (arguments.length === 2) {
+	    indices.forEach(function (collectionIndex, i) {
+	      request[i] = collection[collectionIndex];
+	    });
+	  } else {
+	    indices.forEach(function (collectionIndex, i) {
+	      request[i] = getProperty(collection[collectionIndex]);
+	    });
+	  }
+
+	  return request;
+	};
+
+	/**
+	* Queue -> very very basic queue
+	*/
+
+	var Queue = function () {
+	  function Queue() {
+	    _classCallCheck(this, Queue);
+
+	    this.__queue__ = new Array();
+	    this.length = this.__queue__.length;
+	  }
+
+	  _createClass(Queue, [{
+	    key: "setLength",
+	    value: function setLength() {
+	      this.length = this.__queue__.length;
+	    }
+	  }, {
+	    key: "dequeue",
+	    value: function dequeue() {
+	      var value = this.__queue__.shift();
+	      this.setLength();
+	      return value;
+	    }
+	  }, {
+	    key: "enqueue",
+	    value: function enqueue(x) {
+	      this.__queue__.push(x);
+	      this.setLength();
+	    }
+	  }]);
+
+	  return Queue;
+	}();
+
+	// check if string is in the selected array
+
+
+	function inArray(str, arr) {
+	  for (var i = 0; i < arr.length; i++) {
+	    var word = arr[i];
+	    if (str.toLowerCase() === word.toLowerCase()) {
+	      return true;
+	    }
+	  }
+	}
+
+	function isEmpty(obj) {
+	  return Object.keys(obj).length === 0 || obj.length === 0;
+	}
+
+	module.exports = { indexed: indexed, Queue: Queue, inArray: inArray, isEmpty: isEmpty, pick: pick };
+
+/***/ },
+/* 53 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var Rx = __webpack_require__(47);
+
+	module.exports = {
+		queueSubject: new Rx.ReplaySubject(1),
+		scheduleSubject: new Rx.ReplaySubject(1)
+	};
+
+/***/ },
+/* 54 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _require = __webpack_require__(52);
+
+	var Queue = _require.Queue;
+
+	var _require2 = __webpack_require__(55);
+
+	var RENDER = _require2.RENDER;
+	var PRE_BIND = _require2.PRE_BIND;
+	var BIND = _require2.BIND;
+
+	// state is held in this object
+	// While javascript is dynamic, most implementations prefer
+	// being explicit
+
+	module.exports.transitionState = {
+	  packed: [],
+	  dataBinder: [],
+	  parent: [],
+	  keys: [],
+	  is: {},
+	  len: 0,
+	  flag: false,
+	  time: undefined,
+	  callIndex: -1,
+	  type: 'base',
+	  stage: '',
+	  out: undefined
+	};
+
+	// helper function to report how many transition
+	// are out to be renders
+	function checkOut(obj) {
+	  return obj !== undefined ? obj.length : 0;
+	}
+
+	function packDataBind(state, update) {
+	  var dataBinder = update.dataBinder;
+	  var create = update.create;
+	  var keys = update.keys;
+	  var is = update.is;
+	  var len = update.len;
+	  var time = update.time;
+
+
+	  var next = {
+	    packed: [],
+	    dataBinder: dataBinder,
+	    parent: create,
+	    keys: keys,
+	    is: is,
+	    len: len,
+	    flag: false,
+	    callIndex: -1,
+	    time: time,
+	    type: BIND,
+	    stage: 'post-bind',
+	    out: 0
+	  };
+
+	  return next;
+	}
+
+	function packTransition(state, boundDOM) {
+	  var i = void 0,
+	      transition = void 0;
+
+	  // check if there are transition still out for process
+	  if (boundDOM.hasOwnProperty('returnCount')) {
+	    var countObjectsOut = state.out - boundDOM.returnCount;
+
+	    if (countObjectsOut > 0) {
+
+	      state = Object.assign({}, state, {
+	        out: countObjectsOut,
+	        flag: true
+	      });
+
+	      return state;
+	    }
+	  }
+
+	  //
+	  // when there are no outstanding transitions
+	  // get current transitions
+	  //
+	  i = state.callIndex += 1;
+	  transition = state.is[state.keys[i]];
+
+	  if (state.callIndex === 0) {
+
+	    return Object.assign({}, state, {
+	      packed: [{
+	        parent: boundDOM.parent,
+	        transition: transition,
+	        time: state.time
+	      }],
+	      parent: boundDOM.parent,
+	      out: checkOut(transition),
+	      stage: 'start',
+	      flag: false,
+	      type: RENDER
+	    });
+	  } else if (state.callIndex < state.len) {
+
+	    return Object.assign({}, state, {
+	      packed: [{
+	        parent: state.parent,
+	        transition: transition,
+	        time: state.time
+	      }],
+	      stage: 'continue',
+	      out: checkOut(transition),
+	      flag: false,
+	      type: RENDER
+	    });
+	  } else {
+	    return Object.assign({}, state, {
+	      packed: [],
+	      stage: 'empty',
+	      out: checkOut(transition),
+	      flag: false,
+	      type: RENDER
+	    });
+	  }
+	}
+
+	module.exports.dataModel = function (state, update) {
+	  //stage where data gets passed down
+	  var type = update !== undefined ? update.type : 'done';
+	  // console.log('state',state,'\n','update',update)
+	  switch (type) {
+	    case PRE_BIND:
+	      return packDataBind(state, update);
+	      break;
+
+	    case RENDER:
+	      return packTransition(state, update);
+	      break;
+
+	    case 'done':
+	      // nothing is happening right now. test later to make
+	      // sure it stays the same.
+	      break;
+
+	    default:
+	      break;
+	  }
+	};
+
+/***/ },
+/* 55 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	// global variables for the schedule module
+	module.exports = {
+		LOAD: 'load',
+
+		PRE_BIND: 'pre-bind',
+		BIND: 'bind',
+
+		PRE_RENDER: 'pre-render',
+		RENDER: 'render',
+
+		FINISH: 'finish',
+
+		CALL_NEXT: 'call-next'
+	};
+
+/***/ },
+/* 56 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _require = __webpack_require__(53);
+
+	var queueSubject = _require.queueSubject;
+	var scheduleSubject = _require.scheduleSubject;
+
+	var _require2 = __webpack_require__(55);
+
+	var BIND = _require2.BIND;
+	var RENDER = _require2.RENDER;
+	var FINISH = _require2.FINISH;
+	var PRE_RENDER = _require2.PRE_RENDER;
+	var CALL_NEXT = _require2.CALL_NEXT;
+
+	// views are in this case where the side effects are.  This is where
+	// d3 either is binding data to the DOM or rendering updates
+
+	// binds data to the dom if any and returns the parent object
+	// to apply transitions on.
+
+	function dataView(state) {
+	  var binders = state.dataBinder;
+	  var len = binders.length;
+	  var parent = [];
+
+	  for (var i = 0; i < len; i++) {
+	    var bound = binders.shift();
+	    parent.push(bound());
+	  }
+
+	  scheduleSubject.onNext({
+	    type: RENDER,
+	    stage: PRE_RENDER,
+	    parent: parent,
+	    time: state.time
+	  });
+	}
+
+	/**
+	* callNext -> passed to a d3 transision through 
+	* d3.(select).call pushes a value to scheduleSubject
+	* specific to d3
+	* onNext
+	*/
+	function callNext(time) {
+	  return function (transition) {
+	    var n = 0;
+	    var next = function next() {
+	      scheduleSubject.onNext({
+	        type: RENDER,
+	        stage: CALL_NEXT,
+	        returnCount: 1,
+	        time: time
+	      });
+	    };
+
+	    if (transition.namespace === undefined || transition.empty()) {
+	      return next();
+	    }
+
+	    transition.each(function () {
+	      return ++n;
+	    }).each("end", function () {
+	      if (! --n) {
+	        next();
+	      }
+	    });
+	  };
+	}
+
+	// render function renders a view or if pushes onNext to
+	// queueSubject if there is none to render
+	function renderView(state) {
+	  if (state.callIndex < state.len && state.parent !== undefined) {
+	    var stack = state.packed;
+	    stack.forEach(function (stage) {
+	      var parent = stage.parent;
+	      var transitions = stage.transition;
+	      var len = transitions.length;
+
+	      // the transition contains the onNext to move
+	      // the transition forward uses scheduleSubject like 
+	      // dataView
+	      for (var i = 0; i < len; i++) {
+	        var callNextWithTime = callNext(stage.time);
+	        var trans = transitions.shift();
+	        parent[i].call(trans, callNextWithTime);
+	      }
+	    });
+	  } else {
+	    queueSubject.onNext({ type: FINISH, time: state.time });
+	  }
+	}
+
+	// this step distinguishes it is a data binding step out to process
+	// or a rendering step
+	function views(state) {
+	  var type = state !== undefined ? state.type : 'done';
+
+	  if (type === BIND && state.dataBinder.length > 0) {
+	    dataView(state);
+	  } else if (type === RENDER) {
+	    renderView(state);
+	  } else {
+	    return false;
+	  }
+	}
+
+	module.exports = { views: views };
 
 /***/ }
 /******/ ])

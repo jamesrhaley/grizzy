@@ -1,14 +1,14 @@
-import { Queue } from '../sharedResource';
-import {
+var { Queue } = require('../sharedResource');
+var {
   RENDER,
   PRE_BIND,
   BIND
-} from './scheduler_globals';
+} = require('./scheduler_globals');
 
 // state is held in this object
 // While javascript is dynamic, most implementations prefer
 // being explicit
-export const transitionState = {
+module.exports.transitionState = {
   packed: [],
   dataBinder: [],
   parent: [], 
@@ -118,7 +118,7 @@ function packTransition(state, boundDOM) {
   }
 }
 
-export function dataModel(state, update) {
+module.exports.dataModel =  function (state, update) {
   //stage where data gets passed down
   let type = update !== undefined ? update.type : 'done';
   // console.log('state',state,'\n','update',update)

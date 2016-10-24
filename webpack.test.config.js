@@ -13,7 +13,6 @@ var entries = fs.readdirSync(testPath)
     return testPath + file;
   });
 
-console.log(entries)
 module.exports = {
   entry: entries,
   output: {

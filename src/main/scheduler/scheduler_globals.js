@@ -1,11 +1,14 @@
-export const LOAD = 'load';
+// global variables for the schedule module
+module.exports =  {
+	LOAD : 'load',
 
-export const PRE_BIND = 'pre-bind'
-export const BIND = 'bind';
+	PRE_BIND : 'pre-bind',
+	BIND : 'bind',
 
-export const PRE_RENDER = 'pre-render';
-export const RENDER = 'render';
+	PRE_RENDER : 'pre-render',
+	RENDER : 'render',
 
-export const FINISH = 'finish';
+	FINISH : 'finish',
 
-export const CALL_NEXT = 'call-next';
+	CALL_NEXT : 'call-next'
+};

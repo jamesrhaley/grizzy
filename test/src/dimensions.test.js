@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 import dimensions from '../../src/main/dimensions';
-
-
+var drawSchedule = require('../../src/main/scheduler/scheduler').drawSchedule;
+console.log(drawSchedule)
 describe('grizzy.dimensions', () => {
 	const baseDimensions = {
     width : 800,
