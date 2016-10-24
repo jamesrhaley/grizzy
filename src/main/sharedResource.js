@@ -1,5 +1,10 @@
 
 /**
+* pick -> shorthand for document.querySelector(selector)
+*/
+const pick = (selector) => document.querySelector(selector);
+
+/**
 * indexed -> takes a list of indices and gets them from a 
 *   collection
 * @param{Array::Numbers} (indices) -> index list
@@ -9,7 +14,7 @@
 *   collection
 * @return{Array/Array::Objects/Array::Array}
 */
-export function indexed(indices, collection, getProperty) {
+function indexed(indices, collection, getProperty) {
   let request = new Array(indices.length);
 
   if (arguments.length === 2){
@@ -29,7 +34,7 @@ export function indexed(indices, collection, getProperty) {
 /**
 * Queue -> very very basic queue
 */
-export class Queue {
+class Queue {
   constructor() {
     this.__queue__ = new Array();
     this.length = this.__queue__.length;
@@ -52,7 +57,7 @@ export class Queue {
 }
 
 // check if string is in the selected array
-export function inArray(str, arr) {
+function inArray(str, arr) {
   for (var i = 0; i < arr.length; i++){
     let word = arr[i]
     if (str.toLowerCase() === word.toLowerCase()) {
@@ -61,12 +66,9 @@ export function inArray(str, arr) {
   }
 }
 
-export function isEmpty(obj){
+function isEmpty(obj){
   return Object.keys(obj).length === 0 ||
     obj.length === 0;
 }
 
-// export var sum = d3local.sum
-// export var min = d3local.min;
-
-export const pick = (selector) => document.querySelector(selector);
+module.exports = {indexed, Queue, inArray, isEmpty,pick};

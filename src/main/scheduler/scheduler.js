@@ -1,8 +1,8 @@
-import Rx from 'rx';
-import {queueSubject} from './main';
-import {
+var Rx = require('rx');
+var {queueSubject} = require('./main');
+var {
   LOAD, BIND, PRE_BIND
-} from './scheduler_globals';
+} = require('./scheduler_globals');
 
 /**
  * drawSchedule -> manages the heavy lifing of d3 by creating  a 
@@ -106,4 +106,4 @@ function load(...transitions){
   return transitions;
 }
 
-export { drawSchedule, load };
+module.exports = { drawSchedule, load };
