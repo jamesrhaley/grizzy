@@ -93,7 +93,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  });
 
 	  it('type is an d3 selected object object', function () {
-	    console.log(_typeof(svg[0][0]));
 	    (0, _chai.expect)((typeof svg === 'undefined' ? 'undefined' : _typeof(svg)) === 'object').to.be.true;
 	  });
 	});
@@ -8567,11 +8566,30 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _draw2 = _interopRequireDefault(_draw);
 
+	var _bar = __webpack_require__(50);
+
+	var _bar2 = _interopRequireDefault(_bar);
+
 	var _rx = __webpack_require__(47);
 
 	var _rx2 = _interopRequireDefault(_rx);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// tests for draw.test.js
+	function asyncTest(testValue) {
+		describe('grizzy.draw', function () {
+			it('should run async', function () {
+				(0, _chai.expect)(true).to.be.true;
+			});
+
+			it('should be an array of 26 objects created by d3', function () {
+				(0, _chai.expect)(testValue[0].length === 26).to.be.true;
+			});
+		});
+	}
+
+	var FILE = 'data.tsv';
 
 	function loadData(file) {
 		return _rx2.default.Observable.create(function (observer) {
@@ -8587,8 +8605,6 @@ return /******/ (function(modules) { // webpackBootstrap
 			});
 		});
 	}
-
-	var FILE = 'data.tsv';
 
 	loadData(FILE).subscribe(function (state) {
 		return graph(state);
@@ -8622,47 +8638,9 @@ return /******/ (function(modules) { // webpackBootstrap
 			return d.frequency;
 		})]);
 
-		var testObject = bar(svg, data, { SIZE: SIZE, x: x, y: y });
+		var testObject = (0, _bar2.default)(svg, data, { SIZE: SIZE, x: x, y: y });
 
 		asyncTest(testObject);
-	}
-
-	function bar(parent, data, helpers) {
-		var size = helpers.SIZE;
-		var _x = helpers.x;
-		var _y = helpers.y;
-		return (0, _draw2.default)('.bar', parent, {
-			data: data,
-			is: {
-				enter: function enter(selection) {
-					return selection.enter().append('rect').attr({
-						'class': 'bar',
-						'x': function x(d) {
-							return _x(d.letter);
-						},
-						'width': _x.rangeBand(),
-						'y': function y(d) {
-							return _y(d.frequency);
-						},
-						'height': function height(d) {
-							return size.height - _y(d.frequency);
-						}
-					});
-				}
-			}
-		});
-	}
-
-	function asyncTest(testValue) {
-		describe('grizzy.draw', function () {
-			it('should run async', function () {
-				(0, _chai.expect)(true).to.be.true;
-			});
-
-			it('should be an array of 26 objects created by d3', function () {
-				(0, _chai.expect)(testValue[0].length === 26).to.be.true;
-			});
-		});
 	}
 
 /***/ },
@@ -21194,6 +21172,49 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	process.umask = function() { return 0; };
 
+
+/***/ },
+/* 50 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = bar;
+
+	var _draw = __webpack_require__(46);
+
+	var _draw2 = _interopRequireDefault(_draw);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function bar(parent, data, helpers) {
+	  var size = helpers.SIZE;
+	  var _x = helpers.x;
+	  var _y = helpers.y;
+	  return (0, _draw2.default)('.bar', parent, {
+	    data: data,
+	    is: {
+	      enter: function enter(selection) {
+	        return selection.enter().append('rect').attr({
+	          'class': 'bar',
+	          'x': function x(d) {
+	            return _x(d.letter);
+	          },
+	          'width': _x.rangeBand(),
+	          'y': function y(d) {
+	            return _y(d.frequency);
+	          },
+	          'height': function height(d) {
+	            return size.height - _y(d.frequency);
+	          }
+	        });
+	      }
+	    }
+	  });
+	}
 
 /***/ }
 /******/ ])

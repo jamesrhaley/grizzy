@@ -17,7 +17,6 @@ describe('grizzy.blankSVG', function () {
   })
 
   it('type is an d3 selected object object', function () {
-    console.log(typeof svg[0][0]) 
     expect(typeof svg === 'object').to.be.true;
   }) 
 })

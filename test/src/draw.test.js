@@ -2,8 +2,25 @@ import {expect} from 'chai';
 import dimensions from '../../src/main/dimensions';
 import blankSVG from '../../src/main/blankSVG';
 import draw from '../../src/main/draw';
-
+import bar from './dom/bar';
 import Rx from 'rx';
+
+// tests for draw.test.js
+function asyncTest(testValue) {
+	describe('grizzy.draw', () => {
+		it('should run async', () => {
+			expect(true).to.be.true;
+		})
+
+		it('should be an array of 26 objects created by d3', () => {
+			expect(testValue[0].length === 26).to.be.true;
+		})
+	});
+}
+
+
+
+const FILE = 'data.tsv';
 
 function loadData(file) {
 	return Rx.Observable.create(observer => {
@@ -19,16 +36,13 @@ function loadData(file) {
 		});
 }
 
-const FILE = 'data.tsv';
-
 loadData(FILE)
 	.subscribe(state => graph(state));
 
-
 const BASE_DIMENSIONS = {
-    width : 960,
-    height : 500,
-    margin:{top: 20, right: 20, bottom: 30, left: 40}
+  width : 960,
+  height : 500,
+  margin:{top: 20, right: 20, bottom: 30, left: 40}
 };
 
 const SIZE = dimensions(BASE_DIMENSIONS);
@@ -60,38 +74,4 @@ function graph(data) {
 	let testObject = bar(svg, data, {SIZE,x,y});
 
 	asyncTest(testObject);
-}
-
-function bar(parent, data, helpers){
-  let size = helpers.SIZE;
-  let x = helpers.x;
-  let y = helpers.y;
-	return draw('.bar', parent, {
-  	data: data,
-  	is:{
-  		enter: (selection) => {
-  			return selection.enter().append('rect')
-		      .attr({
-		      	'class': 'bar',
-		      	'x': (d) => x(d.letter),
-		      	'width': x.rangeBand(),
-		      	'y': (d) => y(d.frequency),
-		      	'height': (d) => size.height - y(d.frequency)
-      		});
-
-  		}
-  	}
-  })
-}
-
-function asyncTest(testValue) {
-	describe('grizzy.draw', () => {
-		it('should run async', () => {
-			expect(true).to.be.true;
-		})
-
-		it('should be an array of 26 objects created by d3', () => {
-			expect(testValue[0].length === 26).to.be.true;
-		})
-	});
 }
