@@ -1,4 +1,4 @@
-## Welecome to Grizzy
+##Welecome to Grizzy
 
 Grizzy is a better way to organize your D3 code so you can make complicated applications without having to refactor every time you want to add a feature.
 
