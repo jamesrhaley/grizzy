@@ -6,7 +6,9 @@ to install in a project `npm install grizzy`
 
 to run examples 
 
-`git clone https://github.com/jamesrhaley/grizzy.git'
-`cd grizzy/examples`
-`npm install`
-`gulp`
+```
+git clone https://github.com/jamesrhaley/grizzy.git
+cd grizzy/examples
+npm install
+gulp
+```
