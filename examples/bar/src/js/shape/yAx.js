@@ -3,7 +3,7 @@ const draw = grizzy.draw;
 
 let start = true;
 function yAx(parent, helpers){
-	let yAxis = helpers.yAxis;
+  let yAxis = helpers.yAxis;
   return draw('x axis', parent, {
     data: false,
     is:{
