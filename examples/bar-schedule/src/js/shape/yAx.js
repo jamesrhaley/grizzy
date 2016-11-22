@@ -3,7 +3,7 @@ import {drawSchedule} from 'grizzy';
 
 let start = true;
 function yAx(parent, helpers){
-	let yAxis = helpers.yAxis;
+  let yAxis = helpers.yAxis;
   return drawSchedule('x axis', parent, {
     data: false,
     is:{
