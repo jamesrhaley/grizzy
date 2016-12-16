@@ -1,7 +1,7 @@
-var {queueSubject} = require('./main');
-var {
+import {queueSubject} from './main';
+import {
   LOAD, BIND, PRE_BIND
-} = require('./scheduler_globals');
+} from './scheduler_globals';
 
 /**
  * drawSchedule -> manages the heavy lifing of d3 by creating  a 
@@ -105,4 +105,4 @@ function load(...transitions){
   return transitions;
 }
 
-module.exports = { drawSchedule, load };
+export { drawSchedule, load };

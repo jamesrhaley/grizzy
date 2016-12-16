@@ -1,5 +1,4 @@
-import grizzy, * as gz from 'grizzy';
-const draw = grizzy.draw;
+import {draw} from 'grizzy';
 
 let start = true;
 function xAx(parent, helpers){

@@ -1,8 +1,8 @@
-var {
+import {
   RENDER,
   PRE_BIND,
   BIND
-} = require('./scheduler_globals');
+} from './scheduler_globals';
 
 // state is held in this object
 // While javascript is dynamic, most implementations prefer
@@ -117,7 +117,7 @@ function packTransition(state, boundDOM) {
   }
 }
 
-module.exports.dataModel =  function (state, update) {
+export function dataModel(state, update) {
   //stage where data gets passed down
   let type = update !== undefined ? update.type : 'done';
   // console.log('state',state,'\n','update',update)

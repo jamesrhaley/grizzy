@@ -1,6 +1,6 @@
 {
   "name": "grizzy",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "common visualization functionality",
   "main": "dist/index.js",
   "scripts": {

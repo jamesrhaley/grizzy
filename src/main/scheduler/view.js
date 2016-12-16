@@ -1,11 +1,11 @@
-var {queueSubject, scheduleSubject} = require('./intent');
-var { 
+import {queueSubject, scheduleSubject} from './intent';
+import {
   BIND,
   RENDER,
   FINISH,
   PRE_RENDER,
-  CALL_NEXT
-} = require('./scheduler_globals');
+  CALL_NEXT,
+} from './scheduler_globals';
 
 // views are in this case where the side effects are.  This is where
 // d3 either is binding data to the DOM or rendering updates
@@ -104,4 +104,4 @@ function views(state) {
   }
 }
 
-module.exports = {views};
+export {views};

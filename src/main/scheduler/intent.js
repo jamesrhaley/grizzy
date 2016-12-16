@@ -1,6 +1,4 @@
-var Rx = require('rx');
+import Rx from 'rx';
 
-module.exports = {
-  queueSubject : new Rx.ReplaySubject(1),
-  scheduleSubject : new Rx.ReplaySubject(1)
-};
+export const queueSubject = new Rx.ReplaySubject(1);
+export const scheduleSubject = new Rx.ReplaySubject(1);

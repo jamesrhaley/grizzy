@@ -1,14 +1,14 @@
-var Rx = require('rx');
-var { Queue , isEmpty } = require('../sharedResource');
+import Rx from 'rx';
+import { Queue , isEmpty } from '../sharedResource';
 
-var { queueSubject, scheduleSubject } = require('./intent');
-var { transitionState, dataModel } = require('./model');
-var { views } = require('./view');
-var {
+import {queueSubject, scheduleSubject} from './intent'
+import {transitionState, dataModel} from './model'
+import {views} from './view'
+import {
   LOAD,
   PRE_BIND,
   FINISH
-} = require('./scheduler_globals');
+} from './scheduler_globals';
 
 var masterTime = 0;
 
@@ -107,4 +107,4 @@ mergeSubject
   }); 
 
 
-module.exports = { queueSubject };
+export { queueSubject };
