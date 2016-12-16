@@ -1,8 +1,13 @@
 import {expect} from 'chai';
 import draw from './draw';
-import {svgParent, size, x, y} from './pretest';
-
-
+import {
+  svgParent,
+  size,
+  x,
+  y,
+  xAxis
+} from './loadVars.pretest';
+import d3 from 'd3';
 
 const svg = svgParent();
 
@@ -15,7 +20,7 @@ function bar(parent, data, helpers) {
   let {size, x, y} = helpers;
 
   return draw('.bar', parent, {
-    data: data,
+    data: [data, (d) => d.letter],
     is:{
       enter: (selection) => {
         return selection.enter().append('rect')
@@ -31,12 +36,32 @@ function bar(parent, data, helpers) {
   });
 }
 
+function xAx(parent, helpers){
+  let {xAxis, size} = helpers;
+  let height = size.height;
+
+  return draw('x axis', parent, {
+    data: false,
+    is:{
+      enter: (selection)=> {
+        return selection.append('g')
+          .attr({
+            'class': 'x axis',
+            'transform': 'translate(0,' + height + ')'
+          })
+          .call(xAxis);
+      }
+    }
+  });
+}
+
 describe('grizzy.draw', () => {
-  var graph, oneBar;
+  var graph, oneBar, axis;
 
   before(function (done) {
     graph = bar(svg, testData, {size, x, y});
     oneBar = graph[0][0];
+    axis = xAx(svg, {size, xAxis});
 
     done();
   });
@@ -62,5 +87,14 @@ describe('grizzy.draw', () => {
 
     expect(width)
       .to.equal('4797');
-  }); 
+  });
+
+  it('A D3 element created by another party can be selected by setting data=false', () => {
+    
+    expect(d3.select('.x.axis').attr('transform'))
+      .to.equal('translate(0,400)');
+
+    expect(d3.select('.x.axis')
+      .attr('class')).to.equal('x axis');
+  });
 });

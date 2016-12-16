@@ -7,7 +7,7 @@ import {
 // state is held in this object
 // While javascript is dynamic, most implementations prefer
 // being explicit
-module.exports.transitionState = {
+export var transitionState = {
   packed: [],
   dataBinder: [],
   parent: [], 
