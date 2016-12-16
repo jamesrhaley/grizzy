@@ -1,9 +1,9 @@
 var Rx = require('rx');
 var { Queue , isEmpty } = require('../sharedResource');
 
-var { queueSubject, scheduleSubject } = require('./intent')
-var { transitionState, dataModel } = require('./model')
-var { views } = require('./view')
+var { queueSubject, scheduleSubject } = require('./intent');
+var { transitionState, dataModel } = require('./model');
+var { views } = require('./view');
 var {
   LOAD,
   PRE_BIND,
@@ -29,17 +29,17 @@ function queueModel(acc, curr) {
   if (curr.type === LOAD) {
     let Q = new Queue();
 
-    masterTime = curr.time
+    masterTime = curr.time;
 
     curr.transitions.forEach( transition => {
-      Q.enqueue(transition)
+      Q.enqueue(transition);
     });
 
     return {
       staged: Q.dequeue(),
       queue: Q,
       time: curr.time
-    }
+    };
   } 
 
   else if (curr.type === FINISH) {
@@ -50,7 +50,7 @@ function queueModel(acc, curr) {
         staged: Q.dequeue(),
         queue: Q,
         time: acc.time   
-      }
+      };
     } else {
       return stagedState;
     }
@@ -73,20 +73,20 @@ const queueStream = queueSubject
 const singleStream = queueStream
   .filter(staged => !Array.isArray(staged))
   .map(preTransition => {
-    let pre = preTransition.staged
+    let pre = preTransition.staged;
     let transitions = pre.is;
-    let keys = Object.keys(transitions)
+    let keys = Object.keys(transitions);
     let is = {};
 
     keys.forEach(key => {
       is[key] = [transitions[key]];
-    })
+    });
 
     let post = Object.assign({}, pre, {
       time: preTransition.time,
       dataBinder: [pre.dataBinder],
       is
-    })
+    });
 
     return post;
   });

@@ -1,7 +1,16 @@
-var {queueSubject} = require('./main');
-var {
-  LOAD, BIND, PRE_BIND
-} = require('./scheduler_globals');
+'use strict';
+
+var Rx = require('rx');
+
+var _require = require('./main');
+
+var queueSubject = _require.queueSubject;
+
+var _require2 = require('./scheduler_globals');
+
+var LOAD = _require2.LOAD;
+var BIND = _require2.BIND;
+var PRE_BIND = _require2.PRE_BIND;
 
 /**
  * drawSchedule -> manages the heavy lifing of d3 by creating  a 
@@ -51,41 +60,41 @@ var {
  *     });
  *  }
  */
-function drawSchedule(what, parent, settings){
-  let data = settings.data
-  , create = data === false ? parent : parent.selectAll(what)
-  , keys = Object.keys(settings.is)
-  , len = keys.length
-  , is = settings.is
-  , applyArgs = undefined
-  , dataBinder;
 
-  if (!(data instanceof Array 
-        && data[1] instanceof Function)){
+function drawSchedule(what, parent, settings) {
+  var data = settings.data,
+      create = data === false ? parent : parent.selectAll(what),
+      keys = Object.keys(settings.is),
+      len = keys.length,
+      is = settings.is,
+      applyArgs = undefined,
+      dataBinder = void 0;
+
+  if (!(data instanceof Array && data[1] instanceof Function)) {
     applyArgs = [data];
   } else {
     applyArgs = data;
   }
 
   if (data) {
-    dataBinder = () => {
+    dataBinder = function dataBinder() {
       return create.data.apply(create, applyArgs);
-    }
+    };
   } else {
-    dataBinder = () => {
+    dataBinder = function dataBinder() {
       return create;
-    }
+    };
   }
 
   return {
     type: PRE_BIND,
     // if problems up comment this out
     // parent: create,
-    dataBinder,
-    is,
-    keys,
-    len
-  }
+    dataBinder: dataBinder,
+    is: is,
+    keys: keys,
+    len: len
+  };
 }
 
 /**
@@ -95,14 +104,18 @@ function drawSchedule(what, parent, settings){
  * @param{Object} (transitions) -> any number of object created by
  *   a drawSchedule function
  */
-function load(...transitions){
+function load() {
+  for (var _len = arguments.length, transitions = Array(_len), _key = 0; _key < _len; _key++) {
+    transitions[_key] = arguments[_key];
+  }
+
   queueSubject.onNext({
     type: LOAD,
     time: Date.now(),
-    transitions
+    transitions: transitions
   });
 
   return transitions;
 }
 
-module.exports = { drawSchedule, load };
+module.exports = { drawSchedule: drawSchedule, load: load };

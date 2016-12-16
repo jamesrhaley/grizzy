@@ -1,16 +1,23 @@
-var {
-  RENDER,
-  PRE_BIND,
-  BIND
-} = require('./scheduler_globals');
+'use strict';
+
+var _require = require('../sharedResource');
+
+var Queue = _require.Queue;
+
+var _require2 = require('./scheduler_globals');
+
+var RENDER = _require2.RENDER;
+var PRE_BIND = _require2.PRE_BIND;
+var BIND = _require2.BIND;
 
 // state is held in this object
 // While javascript is dynamic, most implementations prefer
 // being explicit
+
 module.exports.transitionState = {
   packed: [],
   dataBinder: [],
-  parent: [], 
+  parent: [],
   keys: [],
   is: {},
   len: 0,
@@ -28,11 +35,16 @@ function checkOut(obj) {
   return obj !== undefined ? obj.length : 0;
 }
 
-
 function packDataBind(state, update) {
-  let {dataBinder, create, keys, is, len, time} = update;
+  var dataBinder = update.dataBinder;
+  var create = update.create;
+  var keys = update.keys;
+  var is = update.is;
+  var len = update.len;
+  var time = update.time;
 
-  let next = {
+
+  var next = {
     packed: [],
     dataBinder: dataBinder,
     parent: create,
@@ -50,12 +62,13 @@ function packDataBind(state, update) {
   return next;
 }
 
-function packTransition(state, boundDOM) { 
-  let i, transition; 
-  
+function packTransition(state, boundDOM) {
+  var i = void 0,
+      transition = void 0;
+
   // check if there are transition still out for process
   if (boundDOM.hasOwnProperty('returnCount')) {
-    let countObjectsOut = state.out - boundDOM.returnCount;
+    var countObjectsOut = state.out - boundDOM.returnCount;
 
     if (countObjectsOut > 0) {
 
@@ -65,21 +78,21 @@ function packTransition(state, boundDOM) {
       });
 
       return state;
-    } 
+    }
   }
 
   //
   // when there are no outstanding transitions
   // get current transitions
   //
-  i = (state.callIndex += 1);
+  i = state.callIndex += 1;
   transition = state.is[state.keys[i]];
 
   if (state.callIndex === 0) {
 
     return Object.assign({}, state, {
       packed: [{
-        parent:boundDOM.parent,
+        parent: boundDOM.parent,
         transition: transition,
         time: state.time
       }],
@@ -89,13 +102,11 @@ function packTransition(state, boundDOM) {
       flag: false,
       type: RENDER
     });
-  }
-
-  else if (state.callIndex < state.len) {
+  } else if (state.callIndex < state.len) {
 
     return Object.assign({}, state, {
       packed: [{
-        parent:state.parent,
+        parent: state.parent,
         transition: transition,
         time: state.time
       }],
@@ -104,9 +115,7 @@ function packTransition(state, boundDOM) {
       flag: false,
       type: RENDER
     });
-  } 
-
-  else {
+  } else {
     return Object.assign({}, state, {
       packed: [],
       stage: 'empty',
@@ -117,25 +126,25 @@ function packTransition(state, boundDOM) {
   }
 }
 
-module.exports.dataModel =  function (state, update) {
+module.exports.dataModel = function (state, update) {
   //stage where data gets passed down
-  let type = update !== undefined ? update.type : 'done';
+  var type = update !== undefined ? update.type : 'done';
   // console.log('state',state,'\n','update',update)
   switch (type) {
     case PRE_BIND:
       return packDataBind(state, update);
-      break
+      break;
 
     case RENDER:
-      return packTransition(state, update)
+      return packTransition(state, update);
       break;
 
     case 'done':
       // nothing is happening right now. test later to make
       // sure it stays the same.
-      break
-    
+      break;
+
     default:
-      break; 
-   }
-}
+      break;
+  }
+};

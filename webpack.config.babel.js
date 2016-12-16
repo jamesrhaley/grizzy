@@ -1,0 +1,22 @@
+import {join} from 'path'
+
+const context = join(__dirname, 'src')
+
+export default {
+  context,
+  entry: './index',
+  output: {
+    path: join(__dirname, 'dist'),
+    libraryTarget: 'umd',
+    library: 'grizzy',
+  },
+  devtool: 'source-map',
+  externals: {
+    'rx': 'Rx'
+  },
+  module: {
+    loaders: [
+      {test: /\.js$/, loaders: ['babel'], include: context}
+    ]
+  }
+}

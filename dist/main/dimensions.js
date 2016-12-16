@@ -1,3 +1,5 @@
+'use strict';
+
 /**
 * dimensions -> follows the general d3 sizing rules with margins
 * the goal is have a cleaner way of coding the absolute width and 
@@ -20,14 +22,14 @@ function baseDimensions(width, height) {
   var marginLeft = arguments.length <= 5 || arguments[5] === undefined ? 0 : arguments[5];
 
   var sizeObject = {
-    margin : {
-      top: margintop, 
+    margin: {
+      top: margintop,
       right: marginright,
       bottom: marginBottom,
       left: marginLeft
     },
-    width : width - marginLeft - marginright,
-    height : height - margintop - marginBottom
+    width: width - marginLeft - marginright,
+    height: height - margintop - marginBottom
   };
 
   return sizeObject;
@@ -37,7 +39,7 @@ function dimensions(sizing) {
   var props = ['width', 'height', 'margin'];
   var dim = {};
 
-  props.forEach((value, index) => {
+  props.forEach(function (value, index) {
     for (var prop in sizing) {
 
       if (sizing.hasOwnProperty(value)) {
@@ -50,15 +52,14 @@ function dimensions(sizing) {
 
   if (dim[2] === undefined) {
     dim[2] = {
-      top : 0,
-      right : 0,
-      bottom : 0,
-      left : 0,
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0
     };
   }
 
-  return baseDimensions(dim[0], dim[1], dim[2].top, dim[2].right, 
-                       dim[2].bottom,  dim[2].left);
+  return baseDimensions(dim[0], dim[1], dim[2].top, dim[2].right, dim[2].bottom, dim[2].left);
 }
 
 module.exports = dimensions;
