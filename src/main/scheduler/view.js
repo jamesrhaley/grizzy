@@ -1,11 +1,11 @@
-var {queueSubject, scheduleSubject} = require('./intent');
-var { 
+import {queueSubject, scheduleSubject} from './intent';
+import {
   BIND,
   RENDER,
   FINISH,
   PRE_RENDER,
-  CALL_NEXT
-} = require('./scheduler_globals');
+  CALL_NEXT,
+} from './scheduler_globals';
 
 // views are in this case where the side effects are.  This is where
 // d3 either is binding data to the DOM or rendering updates
@@ -27,7 +27,7 @@ function dataView(state){
     stage: PRE_RENDER,
     parent,
     time: state.time
-  })
+  });
 }
 
 /**
@@ -46,7 +46,7 @@ function callNext(time) {
         returnCount: 1,
         time: time
       });
-    }
+    };
 
     if (transition.namespace === undefined || transition.empty()) {    
       return next();
@@ -54,12 +54,12 @@ function callNext(time) {
 
     transition 
       .each(() => ++n) 
-      .each("end", () => { 
+      .each('end', () => { 
         if (!--n) {
           next();
         }
       }); 
-  }
+  };
 }
 
 // render function renders a view or if pushes onNext to
@@ -69,14 +69,14 @@ function renderView(state) {
     let stack = state.packed;
     stack.forEach(stage => {
       let parent = stage.parent;
-      let transitions = stage.transition
+      let transitions = stage.transition;
       let len = transitions.length;
       
       // the transition contains the onNext to move
       // the transition forward uses scheduleSubject like 
       // dataView
       for (let i = 0; i < len; i++) {
-        let callNextWithTime = callNext(stage.time)
+        let callNextWithTime = callNext(stage.time);
         let trans = transitions.shift();
         parent[i].call(trans, callNextWithTime);        
       }
@@ -84,7 +84,7 @@ function renderView(state) {
   } 
 
   else {
-    queueSubject.onNext({type: FINISH, time: state.time})
+    queueSubject.onNext({type: FINISH, time: state.time});
   }
 }
 
@@ -94,14 +94,14 @@ function views(state) {
   let type = state !== undefined ? state.type : 'done';
 
   if (type === BIND && state.dataBinder.length > 0) {
-    dataView(state)  
+    dataView(state);
   }
   else if (type === RENDER) {
-    renderView(state) 
+    renderView(state);
   }
   else {
-    return false
+    return false;
   }
 }
 
-module.exports = {views};
+export {views};

@@ -1,12 +1,9 @@
 
-import grizzy, * as gz from 'grizzy';
+import {dimensions, blankSVG} from 'grizzy';
 import {bar} from './shape/bar';
 import {xAx} from './shape/xAx';
 import {yAx} from './shape/yAx';
 
-const dimensions = gz.dimensions;
-const blankSVG = gz.blankSVG;
-const draw = grizzy.draw;
 
 const BASE_DIMENSIONS = {
     width : 960,

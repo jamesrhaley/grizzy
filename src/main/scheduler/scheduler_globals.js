@@ -1,14 +1,14 @@
 // global variables for the schedule module
 module.exports =  {
-	LOAD : 'load',
+  LOAD : 'load',
 
-	PRE_BIND : 'pre-bind',
-	BIND : 'bind',
+  PRE_BIND : 'pre-bind',
+  BIND : 'bind',
 
-	PRE_RENDER : 'pre-render',
-	RENDER : 'render',
+  PRE_RENDER : 'pre-render',
+  RENDER : 'render',
 
-	FINISH : 'finish',
+  FINISH : 'finish',
 
-	CALL_NEXT : 'call-next'
+  CALL_NEXT : 'call-next'
 };

@@ -17,29 +17,29 @@
 
 function blankSVG(d3local, size, select) {
   select = select !== undefined ? select : 'body';
-
+  // console.log(select)
   return d3local.select(select)
-    .append("svg")
+    .append('svg')
     .attr({
-      "width" : (
+      'width' : (
         size.width 
         + size.margin.left 
         + size.margin.right
       ),
-      "height" : (
+      'height' : (
         size.height
         + size.margin.top
         + size.margin.bottom
       )
     })
-    .append("g")
+    .append('g')
       .attr({
-        "transform": "translate(" 
+        'transform': 'translate(' 
           + size.margin.left 
-          + "," 
+          + ',' 
           + size.margin.top 
-          + ")"
+          + ')'
       });
 }
 
-module.exports = blankSVG;
+export default blankSVG;

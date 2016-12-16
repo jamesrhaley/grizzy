@@ -2,7 +2,7 @@
 /**
 * pick -> shorthand for document.querySelector(selector)
 */
-const pick = (selector) => document.querySelector(selector);
+//export const pick = (selector) => document.querySelector(selector);
 
 /**
 * indexed -> takes a list of indices and gets them from a 
@@ -14,27 +14,27 @@ const pick = (selector) => document.querySelector(selector);
 *   collection
 * @return{Array/Array::Objects/Array::Array}
 */
-function indexed(indices, collection, getProperty) {
-  let request = new Array(indices.length);
+// export function indexed(indices, collection, getProperty) {
+//   let request = new Array(indices.length);
 
-  if (arguments.length === 2){
-      indices.forEach( (collectionIndex, i) => {
-        request[i] = collection[collectionIndex];
-      });
+//   if (arguments.length === 2){
+//       indices.forEach( (collectionIndex, i) => {
+//         request[i] = collection[collectionIndex];
+//       });
       
-  } else {
-      indices.forEach( (collectionIndex, i) => {
-        request[i] = getProperty(collection[collectionIndex]);
-      });
-  }
+//   } else {
+//       indices.forEach( (collectionIndex, i) => {
+//         request[i] = getProperty(collection[collectionIndex]);
+//       });
+//   }
 
-  return request;
-};
+//   return request;
+// };
 
 /**
 * Queue -> very very basic queue
 */
-class Queue {
+export class Queue {
   constructor() {
     this.__queue__ = new Array();
     this.length = this.__queue__.length;
@@ -57,18 +57,16 @@ class Queue {
 }
 
 // check if string is in the selected array
-function inArray(str, arr) {
-  for (var i = 0; i < arr.length; i++){
-    let word = arr[i]
-    if (str.toLowerCase() === word.toLowerCase()) {
-      return true
-    }  
-  }
-}
+// export function inArray(str, arr) {
+//   for (var i = 0; i < arr.length; i++){
+//     let word = arr[i]
+//     if (str.toLowerCase() === word.toLowerCase()) {
+//       return true
+//     }  
+//   }
+// }
 
-function isEmpty(obj){
+export function isEmpty(obj){
   return Object.keys(obj).length === 0 ||
     obj.length === 0;
 }
-
-module.exports = {indexed, Queue, inArray, isEmpty, pick};

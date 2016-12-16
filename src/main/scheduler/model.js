@@ -1,14 +1,13 @@
-var { Queue } = require('../sharedResource');
-var {
+import {
   RENDER,
   PRE_BIND,
   BIND
-} = require('./scheduler_globals');
+} from './scheduler_globals';
 
 // state is held in this object
 // While javascript is dynamic, most implementations prefer
 // being explicit
-module.exports.transitionState = {
+export var transitionState = {
   packed: [],
   dataBinder: [],
   parent: [], 
@@ -31,9 +30,9 @@ function checkOut(obj) {
 
 
 function packDataBind(state, update) {
-	let {dataBinder, create, keys, is, len, time} = update;
+  let {dataBinder, create, keys, is, len, time} = update;
 
- 	let next = {
+  let next = {
     packed: [],
     dataBinder: dataBinder,
     parent: create,
@@ -46,9 +45,9 @@ function packDataBind(state, update) {
     type: BIND,
     stage: 'post-bind',
     out: 0
-	};
+  };
 
-	return next;
+  return next;
 }
 
 function packTransition(state, boundDOM) { 
@@ -118,25 +117,25 @@ function packTransition(state, boundDOM) {
   }
 }
 
-module.exports.dataModel =  function (state, update) {
+export function dataModel(state, update) {
   //stage where data gets passed down
   let type = update !== undefined ? update.type : 'done';
   // console.log('state',state,'\n','update',update)
   switch (type) {
     case PRE_BIND:
-    	return packDataBind(state, update);
-    	break
+      return packDataBind(state, update);
+      break
 
     case RENDER:
       return packTransition(state, update)
-    	break;
+      break;
 
     case 'done':
-    	// nothing is happening right now. test later to make
-    	// sure it stays the same.
-    	break
-  	
-  	default:
-    	break; 
+      // nothing is happening right now. test later to make
+      // sure it stays the same.
+      break
+    
+    default:
+      break; 
    }
 }

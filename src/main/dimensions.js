@@ -13,22 +13,25 @@
 *     margin:{top: 10, right: 30, bottom: 10, left: 20}
 * });
 */
-function baseDimensions(width, height) {
-  var margintop = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
-  var marginright = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
-  var marginBottom = arguments.length <= 4 || arguments[4] === undefined ? 0 : arguments[4];
-  var marginLeft = arguments.length <= 5 || arguments[5] === undefined ? 0 : arguments[5];
+function baseDimensions(width, height, margintop, marginright, marginBottom, marginLeft) {
+  // var margintop = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
+  // var marginright = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
+  // var marginBottom = arguments.length <= 4 || arguments[4] === undefined ? 0 : arguments[4];
+  // var marginLeft = arguments.length <= 5 || arguments[5] === undefined ? 0 : arguments[5];
 
   var sizeObject = {
+
     margin : {
       top: margintop, 
       right: marginright,
       bottom: marginBottom,
       left: marginLeft
     },
+
     width : width - marginLeft - marginright,
+
     height : height - margintop - marginBottom
-  }
+  };
 
   return sizeObject;
 }
@@ -37,28 +40,36 @@ function dimensions(sizing) {
   var props = ['width', 'height', 'margin'];
   var dim = {};
 
-  props.forEach((value, index) => {
-    for (var prop in sizing) {
+  props.forEach((prop, index) => {
 
-      if (sizing.hasOwnProperty(value)) {
-        dim[index] = sizing[value]
-      } else {
-        dim[index] = undefined
-      }
+    if (sizing.hasOwnProperty(prop)) {
+
+      dim[prop] = sizing[prop];
+
+    } else {
+
+      dim[prop] = undefined;
     }
   });
 
-  if (dim[2] === undefined) {
-    dim[2] = {
+  if (dim['margin'] === undefined) {
+
+    dim['margin'] = {
       top : 0,
       right : 0,
       bottom : 0,
       left : 0,
-    }
+    };
   }
 
-  return baseDimensions(dim[0], dim[1], dim[2].top, dim[2].right, 
-                       dim[2].bottom,  dim[2].left);
+  return baseDimensions(
+    dim['width'],
+    dim['height'],
+    dim['margin'].top,
+    dim['margin'].right,
+    dim['margin'].bottom,
+    dim['margin'].left
+  );
 }
 
-module.exports = dimensions;
+export default dimensions;
