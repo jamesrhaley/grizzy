@@ -71,4 +71,4 @@ function isEmpty(obj){
     obj.length === 0;
 }
 
-module.exports = {indexed, Queue, inArray, isEmpty, pick};
+export {indexed, Queue, inArray, isEmpty, pick};

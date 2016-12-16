@@ -61,4 +61,4 @@ function dimensions(sizing) {
                        dim[2].bottom,  dim[2].left);
 }
 
-module.exports = dimensions;
+export default dimensions;

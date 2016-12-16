@@ -1,6 +1,6 @@
 {
   "name": "grizzy",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "common visualization functionality",
   "main": "dist/index.js",
   "scripts": {
@@ -9,6 +9,7 @@
     "build:main": "babel --copy-files --out-dir dist --ignore *.test.js src",
     "build:umd": "webpack --output-filename index.umd.js",
     "build:umd.min": "webpack --output-filename index.umd.min.js -p",
+    "postbuild": "rm dist/main/pretest.js", 
     "lint": "eslint src",
     "test": "karma start",
     "watch:test": "npm test -- --auto-watch --no-single-run",

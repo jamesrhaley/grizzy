@@ -1,14 +1,7 @@
-var draw = require('./main/draw');
-var dimensions = require('./main/dimensions');
-var blankSVG = require('./main/blankSVG');
-var drawSchedule = require('./main/scheduler/scheduler').drawSchedule;
-var load = require('./main/scheduler/scheduler').load;
+import draw from './main/draw';
+import dimensions from './main/dimensions';
+import blankSVG from './main/blankSVG';
+import {drawSchedule} from './main/scheduler/scheduler';
+import {load} from './main/scheduler/scheduler';
 
-
-module.exports = {
-  blankSVG : blankSVG,
-  draw : draw,
-  drawSchedule : drawSchedule,
-  dimensions : dimensions,
-  load : load
-};
+export {blankSVG, draw, drawSchedule, dimensions, load};

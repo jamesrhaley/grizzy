@@ -1,13 +1,7 @@
 import {expect} from 'chai';
 import blankSVG from './blankSVG';
+import {baseDimensions} from './pretest';
 import d3 from 'd3';
-
-
-const baseDimensions = {
-  width : 800,
-  height : 500,
-  margin: {top: 20, right: 200, bottom: 80, left: 67}
-};
 
 const svg = blankSVG(d3, baseDimensions);
 

@@ -42,4 +42,4 @@ function blankSVG(d3local, size, select) {
       });
 }
 
-module.exports = blankSVG;
+export default blankSVG;

@@ -1,12 +1,8 @@
 import {expect} from 'chai';
 import dimensions from './dimensions';
+import {baseDimensions} from './pretest';
 
 describe('grizzy.dimensions', () => {
-  const baseDimensions = {
-    width : 800,
-    height : 500,
-    margin:{top: 20, right: 200, bottom: 80, left: 67}
-  };
   const allDimensions = dimensions(baseDimensions);
 
   it('dimensions should return an object', () => {

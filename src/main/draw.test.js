@@ -1,25 +1,10 @@
 import {expect} from 'chai';
 import draw from './draw';
-import dimensions from './dimensions';
-import blankSVG from './blankSVG';
-import d3 from 'd3';
+import {svgParent, size, x, y} from './pretest';
 
 
-const baseDimensions = {
-  width : 800,
-  height : 500,
-  margin: {top: 20, right: 200, bottom: 80, left: 67}
-};
 
-const size = dimensions(baseDimensions);
-
-const svg = blankSVG(d3, baseDimensions);
-
-const x = d3.scale.ordinal()
-  .rangeRoundBands([0, size.width], .1);
-
-const y = d3.scale.linear()
-  .range([size.height, 0]);
+const svg = svgParent();
 
 const testData = [
   {letter: 'A', frequency: 0.08167},
@@ -27,9 +12,7 @@ const testData = [
 ];
 
 function bar(parent, data, helpers) {
-  let size = helpers.size;
-  let x = helpers.x;
-  let y = helpers.y;
+  let {size, x, y} = helpers;
 
   return draw('.bar', parent, {
     data: data,

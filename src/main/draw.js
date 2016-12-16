@@ -66,4 +66,4 @@ function draw(what, parent, settings){
   return create;
 }
 
-module.exports = draw;
+export default draw;
