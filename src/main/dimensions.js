@@ -14,11 +14,6 @@
 * });
 */
 function baseDimensions(width, height, margintop, marginright, marginBottom, marginLeft) {
-  // var margintop = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
-  // var marginright = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
-  // var marginBottom = arguments.length <= 4 || arguments[4] === undefined ? 0 : arguments[4];
-  // var marginLeft = arguments.length <= 5 || arguments[5] === undefined ? 0 : arguments[5];
-
   var sizeObject = {
 
     margin : {
@@ -40,7 +35,7 @@ function dimensions(sizing) {
   var props = ['width', 'height', 'margin'];
   var dim = {};
 
-  props.forEach((prop, index) => {
+  props.forEach(prop => {
 
     if (sizing.hasOwnProperty(prop)) {
 

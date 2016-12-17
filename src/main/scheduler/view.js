@@ -1,4 +1,4 @@
-import {queueSubject, scheduleSubject} from './intent';
+import { queueSubject, scheduleSubject } from './intent';
 import {
   BIND,
   RENDER,

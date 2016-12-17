@@ -32,7 +32,7 @@ function bar(parent, data, helpers) {
   });
 }
 
-function xAx(parent, helpers){
+function xAx(parent, helpers) {
   let {xAxis, size} = helpers;
   let height = size.height;
 
@@ -52,12 +52,12 @@ function xAx(parent, helpers){
 }
 
 describe('grizzy.draw', () => {
-  var graph, oneBar, axis;
+  var graph, oneBar;
 
   before(function (done) {
     graph = bar(svg, testData, {size, x, y});
     oneBar = graph[0][0];
-    axis = xAx(svg, {size, xAxis});
+    xAx(svg, {size, xAxis});
 
     done();
   });

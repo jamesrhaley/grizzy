@@ -1,16 +1,17 @@
+import { expect } from 'chai';
 import { queueSubject } from './intent';
 
-describe('queueSubject', function () {
+describe('queueSubject', () => {
   const gather = [];
 
   before(function (done) {
 
     var subscription = queueSubject.subscribe(
       (x) => {
-        gather.push(x)
+        gather.push(x);
       },
       (err) => {
-        console.log('Error: ' + err);
+        console.error('Error: ' + err);
       },
       () => {
 
@@ -24,10 +25,10 @@ describe('queueSubject', function () {
     queueSubject.onNext('c');
     queueSubject.onCompleted();
 
-    subscription.dispose()
+    subscription.dispose();
   });
 
-  it('Should be [a, b, c, Completed]"', function() {
+  it('Should be [a, b, c, Completed]"', () => {
     expect(gather).to.eql(['a', 'b', 'c', 'Completed']);
   });
 });

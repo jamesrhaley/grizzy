@@ -66,7 +66,7 @@ export class Queue {
 //   }
 // }
 
-export function isEmpty(obj){
+export function isEmpty(obj) {
   return Object.keys(obj).length === 0 ||
     obj.length === 0;
 }
