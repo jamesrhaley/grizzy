@@ -5,16 +5,12 @@ import {
   size,
   x,
   y,
-  xAxis
+  xAxis,
+  testData
 } from './loadVars.pretest';
 import d3 from 'd3';
 
 const svg = svgParent();
-
-const testData = [
-  {letter: 'A', frequency: 0.08167},
-  {letter: 'B', frequency: 0.01492}
-];
 
 function bar(parent, data, helpers) {
   let {size, x, y} = helpers;

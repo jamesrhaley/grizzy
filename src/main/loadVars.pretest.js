@@ -22,3 +22,8 @@ export const y = d3.scale.linear()
 export const xAxis = d3.svg.axis()
   .scale(x)
   .orient('bottom');
+
+export const testData = [
+  {letter: 'A', frequency: 0.08167},
+  {letter: 'B', frequency: 0.01492}
+];
