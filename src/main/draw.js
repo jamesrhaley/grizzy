@@ -43,7 +43,7 @@
  *     });
  */
 
-function draw(what, parent, settings){
+function draw(what, parent, settings) {
   let data = settings.data;
   let create = data === false ? parent : parent.selectAll(what);
   let keys = Object.keys(settings.is);
@@ -51,7 +51,7 @@ function draw(what, parent, settings){
   let applyArgs;
 
   // I do not believe that I have actually covered all cases
-  if (!(data instanceof Array && data[1] instanceof Function)){
+  if (!(data instanceof Array && data[1] instanceof Function)) {
     applyArgs = [data];
   } else {
     applyArgs = data;
@@ -61,7 +61,7 @@ function draw(what, parent, settings){
     create = create.data.apply(create, applyArgs);
   }
 
-  for (let i = 0; i < len; i++){
+  for (let i = 0; i < len; i++) {
     create.call(settings.is[ keys[i] ]);  
   }
   return create;

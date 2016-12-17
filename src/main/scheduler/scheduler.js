@@ -1,6 +1,7 @@
-import {queueSubject} from './main';
+import { queueSubject } from './main';
 import {
-  LOAD, BIND, PRE_BIND
+  LOAD,
+  PRE_BIND
 } from './scheduler_globals';
 
 /**
@@ -51,7 +52,7 @@ import {
  *     });
  *  }
  */
-function drawSchedule(what, parent, settings){
+function drawSchedule(what, parent, settings) {
   let data = settings.data;
   let create = data === false ? parent : parent.selectAll(what);
   let keys = Object.keys(settings.is);
@@ -70,11 +71,11 @@ function drawSchedule(what, parent, settings){
   if (data) {
     dataBinder = () => {
       return create.data.apply(create, applyArgs);
-    }
+    };
   } else {
     dataBinder = () => {
       return create;
-    }
+    };
   }
 
   return {
@@ -85,7 +86,7 @@ function drawSchedule(what, parent, settings){
     is,
     keys,
     len
-  }
+  };
 }
 
 /**
@@ -96,7 +97,7 @@ function drawSchedule(what, parent, settings){
  *   a drawSchedule function
  */
 function load(...transitions){
-  console.log(transitions)
+
   queueSubject.onNext({
     type: LOAD,
     time: Date.now(),

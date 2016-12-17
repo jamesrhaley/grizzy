@@ -1,12 +1,10 @@
 import Rx from 'rx';
 import { Queue , isEmpty } from '../sharedResource';
-
-import {queueSubject, scheduleSubject} from './intent'
-import {transitionState, dataModel} from './model'
-import {views} from './view'
+import { queueSubject, scheduleSubject } from './intent';
+import { transitionState, dataModel } from './model';
+import { views } from './view';
 import {
   LOAD,
-  PRE_BIND,
   FINISH
 } from './scheduler_globals';
 

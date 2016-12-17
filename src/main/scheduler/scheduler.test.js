@@ -1,4 +1,5 @@
-import { drawSchedule, load } from './scheduler'
+import { expect } from 'chai';
+import { drawSchedule, load } from './scheduler';
 import {
   svgParent,
   size,
@@ -10,7 +11,7 @@ import {
 
 const svg = svgParent();
 
-function bar(parent, data, helpers){
+function bar(parent, data, helpers) {
   let size = helpers.size;
   let x = helpers.x;
   let y = helpers.y;
@@ -23,7 +24,7 @@ function bar(parent, data, helpers){
             'class': 'bar',
             'x': (d) => x(d.letter),
             'width': x.rangeBand(),
-            'y': (d) => 0,
+            'y': () => 0,
             'height': (d) => size.height - y(d.frequency)
           })
           .style({
@@ -31,7 +32,7 @@ function bar(parent, data, helpers){
           })
           .transition().delay(100)
           .attr({
-            "y": (d) => y(d.frequency)
+            'y': (d) => y(d.frequency)
           })
           .style({
             'opacity': 1
@@ -40,44 +41,46 @@ function bar(parent, data, helpers){
 
       }
     }
-  })
+  });
 }
 
 let start = true;
-function xAx(parent, helpers){
+
+function xAx(parent, helpers) {
   let xAxis = helpers.xAxis;
   let height = helpers.size.height;
 
   return drawSchedule('x axis', parent, {
     data: false,
     is:{
-      enter: (selection, done)=> {
-        let axis = selection
-        if (start) {
-            start = false;
+      enter: (selection, done) => {
+        let axis = selection;
 
-        axis.append('g')
-          .attr({
-            'class': 'x axis',
-            'transform': 'translate(0,' + height + ')'
-          })
-          .style({
-            'opacity': 0
-          })
-          .transition().delay(100)
-          .style({
-            'opacity': 1
-          })
-          .call(xAxis);
+        if (start) {
+          start = false;
+
+          axis.append('g')
+            .attr({
+              'class': 'x axis',
+              'transform': 'translate(0,' + height + ')'
+            })
+            .style({
+              'opacity': 0
+            })
+            .transition().delay(100)
+            .style({
+              'opacity': 1
+            })
+            .call(xAxis);
         }
-        return axis
-          .call(done);
+
+        return axis.call(done);
       }
     }
-  })
+  });
 }
 
-describe('drawSchedule', function () {
+describe('drawSchedule', () => {
   let schdeduleObject, type, dataBinder, is, keys, len;
 
   before(function (done) {
@@ -91,27 +94,27 @@ describe('drawSchedule', function () {
     done();
   });
 
-  it('Should be an object', function() {
+  it('Should be an object', () => {
     expect(typeof schdeduleObject === 'object').to.be.true;
   });
 
-  it('Should have a type', function() {
+  it('Should have a type', () => {
     expect(type).to.equal('pre-bind');
   });
 
-  it('Should have a data binding function', function() {
+  it('Should have a data binding function', () => {
     expect(typeof dataBinder === 'function').to.be.true;
   });
 
-  it('Should have a is to describe what it will be', function() {
+  it('Should have a is to describe what it will be', () => {
     expect(typeof is === 'object').to.be.true;
   });
 
-  it('Should have keys', function() {
+  it('Should have keys', () => {
     expect(keys).to.eql(['enter']);
   });
 
-  it('Should have length', function() {
+  it('Should have length', () => {
     expect(len).to.equal(1);
   });
 
@@ -121,21 +124,21 @@ describe('drawSchedule', function () {
 
 });
 
-describe('load', function () {
+describe('load', () => {
   let loaded;
 
   before(function (done) {
+
     loaded = load(
       bar(svg, testData, {size,x,y}),
       xAx(svg, {size, xAxis})
     );
 
     // needed this time to complete the async call
-    setTimeout(()=>done(),1000);
+    setTimeout(() => done(), 1000);
   });
 
-  it('Should have length', function() {
-    console.log(loaded)
+  it('Should have length', () => {
+    console.log(loaded);
   });
-
 });

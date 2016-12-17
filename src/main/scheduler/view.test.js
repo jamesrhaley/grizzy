@@ -1,7 +1,8 @@
-import {view} from './view';
+import { expect } from 'chai';
+//import { view } from './view';
 
-describe('view', function () {
-  it('Should select existing DOM element', function() {
+describe('view', () => {
+  it('Should select existing DOM element', () => {
     expect(true).to.be.true;
   });
 });
