@@ -52,13 +52,13 @@ import {
  *  }
  */
 function drawSchedule(what, parent, settings){
-  let data = settings.data
-  , create = data === false ? parent : parent.selectAll(what)
-  , keys = Object.keys(settings.is)
-  , len = keys.length
-  , is = settings.is
-  , applyArgs = undefined
-  , dataBinder;
+  let data = settings.data;
+  let create = data === false ? parent : parent.selectAll(what);
+  let keys = Object.keys(settings.is);
+  let len = keys.length;
+  let is = settings.is;
+  let applyArgs = undefined;
+  let dataBinder = undefined;
 
   if (!(data instanceof Array 
         && data[1] instanceof Function)){
@@ -96,6 +96,7 @@ function drawSchedule(what, parent, settings){
  *   a drawSchedule function
  */
 function load(...transitions){
+  console.log(transitions)
   queueSubject.onNext({
     type: LOAD,
     time: Date.now(),
