@@ -1,25 +1,29 @@
-import {
-  RENDER,
-  PRE_BIND,
-  BIND
-} from './scheduler_globals';
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.transitionState = undefined;
+exports.dataModel = dataModel;
+
+var _scheduler_globals = require('./scheduler_globals');
 
 // state is held in this object
 // While javascript is dynamic, most implementations prefer
 // being explicit
-export var transitionState = {
+var transitionState = exports.transitionState = {
   packed: [],
   dataBinder: [],
-  parent: [], 
-  keys: [],
+  parent: [],
+  keys: [], // don't need
   is: {},
-  len: 0,
-  flag: false,
-  time: undefined,
-  callIndex: -1,
+  len: 0, // don't need
+  flag: false, // don't need
+  time: undefined, // don't need
+  callIndex: -1, // don't need
   type: 'base',
-  stage: '',
-  out: undefined
+  stage: '', // only need a type or a stage
+  out: undefined // don't need
 };
 
 // helper function to report how many transition
@@ -28,11 +32,16 @@ function checkOut(obj) {
   return obj !== undefined ? obj.length : 0;
 }
 
-
 function packDataBind(state, update) {
-  let {dataBinder, create, keys, is, len, time} = update;
+  var dataBinder = update.dataBinder,
+      create = update.create,
+      keys = update.keys,
+      is = update.is,
+      len = update.len,
+      time = update.time;
 
-  let next = {
+
+  var next = {
     packed: [],
     dataBinder: dataBinder,
     parent: create,
@@ -42,7 +51,7 @@ function packDataBind(state, update) {
     flag: false,
     callIndex: -1,
     time: time,
-    type: BIND,
+    type: _scheduler_globals.BIND,
     stage: 'post-bind',
     out: 0
   };
@@ -50,12 +59,13 @@ function packDataBind(state, update) {
   return next;
 }
 
-function packTransition(state, boundDOM) { 
-  let i, transition; 
-  
+function packTransition(state, boundDOM) {
+  var i = void 0,
+      transition = void 0;
+
   // check if there are transition still out for process
   if (boundDOM.hasOwnProperty('returnCount')) {
-    let countObjectsOut = state.out - boundDOM.returnCount;
+    var countObjectsOut = state.out - boundDOM.returnCount;
 
     if (countObjectsOut > 0) {
 
@@ -65,21 +75,21 @@ function packTransition(state, boundDOM) {
       });
 
       return state;
-    } 
+    }
   }
 
   //
   // when there are no outstanding transitions
   // get current transitions
   //
-  i = (state.callIndex += 1);
+  i = state.callIndex += 1;
   transition = state.is[state.keys[i]];
 
   if (state.callIndex === 0) {
 
     return Object.assign({}, state, {
       packed: [{
-        parent:boundDOM.parent,
+        parent: boundDOM.parent,
         transition: transition,
         time: state.time
       }],
@@ -87,55 +97,43 @@ function packTransition(state, boundDOM) {
       out: checkOut(transition),
       stage: 'start',
       flag: false,
-      type: RENDER
+      type: _scheduler_globals.RENDER
     });
-  }
-
-  else if (state.callIndex < state.len) {
+  } else if (state.callIndex < state.len) {
 
     return Object.assign({}, state, {
       packed: [{
-        parent:state.parent,
+        parent: state.parent,
         transition: transition,
         time: state.time
       }],
       stage: 'continue',
       out: checkOut(transition),
       flag: false,
-      type: RENDER
+      type: _scheduler_globals.RENDER
     });
-  } 
-
-  else {
+  } else {
     return Object.assign({}, state, {
       packed: [],
       stage: 'empty',
       out: checkOut(transition),
       flag: false,
-      type: RENDER
+      type: _scheduler_globals.RENDER
     });
   }
 }
 
-export function dataModel(state, update) {
-  //stage where data gets passed down
-  let type = update !== undefined ? update.type : 'done';
-  // console.log('state',state,'\n','update',update)
-  switch (type) {
-    case PRE_BIND:
-      return packDataBind(state, update);
-      break
+function dataModel(state, update) {
+  var type = update.type;
 
-    case RENDER:
-      return packTransition(state, update)
-      break;
-
-    case 'done':
-      // nothing is happening right now. test later to make
-      // sure it stays the same.
-      break
-    
-    default:
-      break; 
-   }
+  if (type === _scheduler_globals.PRE_BIND) {
+    return packDataBind(state, update);
+  } else if (type === _scheduler_globals.RENDER) {
+    return packTransition(state, update);
+  } else {
+    // error should be passed to rxjs
+    var str = 'dataModel in model.js is receiving an undefied object fix this';
+    var err = new Error(str);
+    throw err;
+  }
 }

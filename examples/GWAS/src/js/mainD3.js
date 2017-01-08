@@ -1,11 +1,10 @@
 import { d3local} from './helpers/sharedResource';
-import grizzy, * as gz from 'grizzy';
+import { dimensions, blankSVG, load } from '../lib/index';
 import { model } from './models/model';
 import { makeCircles } from './shapes/circles';
 import { legend, legendPre } from './shapes/legend';
 import { axis } from './shapes/axis';
 import { annotation } from './shapes/annotation';
-import {load} from './scheduler/scheduler';
 import { 
 	BASE_DIMENSIONS,
 	COLOR
@@ -14,8 +13,8 @@ import {
 
 //https://www.ebi.ac.uk/gwas/docs/downloads
 
-const dimensions = gz.dimensions;
-const blankSVG = gz.blankSVG;
+// const dimensions = gz.dimensions;
+// const blankSVG = gz.blankSVG;
 
 const SIZE = dimensions(BASE_DIMENSIONS);
 
@@ -84,8 +83,8 @@ function scatter(data, speed) {
   state.circles
     .sort((a,b)=> a.x - b.x);
 
-
   load(
+    'scatter',
     legendPre(svg),
     axis(svg, SIZE, xAxis, yAxis),
     makeCircles(svg, state.circles, speed),

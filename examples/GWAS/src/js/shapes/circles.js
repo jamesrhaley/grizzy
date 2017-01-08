@@ -1,6 +1,5 @@
-import grizzy from 'grizzy';
 import Rx from 'rx';
-import {drawSchedule} from '../scheduler/scheduler';
+import { drawSchedule } from '../../lib/index';
 
 import { 
   BASE_OPACITY,

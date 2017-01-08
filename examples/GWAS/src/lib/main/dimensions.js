@@ -1,19 +1,24 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 /**
  * @ignore
  */
 function baseDimensions(width, height, margintop, marginright, marginBottom, marginLeft) {
   var sizeObject = {
 
-    margin : {
-      top: margintop, 
+    margin: {
+      top: margintop,
       right: marginright,
       bottom: marginBottom,
       left: marginLeft
     },
 
-    width : width - marginLeft - marginright,
+    width: width - marginLeft - marginright,
 
-    height : height - margintop - marginBottom
+    height: height - margintop - marginBottom
   };
 
   return sizeObject;
@@ -47,12 +52,11 @@ function dimensions(sizing) {
   var props = ['width', 'height', 'margin'];
   var dim = {};
 
-  props.forEach(prop => {
+  props.forEach(function (prop) {
 
     if (sizing.hasOwnProperty(prop)) {
 
       dim[prop] = sizing[prop];
-
     } else {
 
       dim[prop] = undefined;
@@ -62,21 +66,14 @@ function dimensions(sizing) {
   if (dim['margin'] === undefined) {
 
     dim['margin'] = {
-      top : 0,
-      right : 0,
-      bottom : 0,
-      left : 0,
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0
     };
   }
 
-  return baseDimensions(
-    dim['width'],
-    dim['height'],
-    dim['margin'].top,
-    dim['margin'].right,
-    dim['margin'].bottom,
-    dim['margin'].left
-  );
+  return baseDimensions(dim['width'], dim['height'], dim['margin'].top, dim['margin'].right, dim['margin'].bottom, dim['margin'].left);
 }
 
-export default dimensions;
+exports.default = dimensions;

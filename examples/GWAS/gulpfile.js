@@ -86,6 +86,7 @@ gulp.task('data', function() {
 
 gulp.task('watch', function() {
     gulp.watch([
+        './src/lib',
         './src/**/**/*.js',
         './src/**/*.js',
         './src/*.js'

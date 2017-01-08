@@ -1,8 +1,19 @@
-import { queueSubject } from './main';
-import {
-  LOAD,
-  PRE_BIND
-} from './scheduler_globals';
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.load = exports.drawSchedule = undefined;
+
+var _globalKeys = require('./globalKeys');
+
+var _pipeline = require('./pipeline');
+
+var _id = require('./id');
+
+var _id2 = _interopRequireDefault(_id);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * drawSchedule -> manages the heavy lifing of d3 by creating  a 
@@ -53,58 +64,47 @@ import {
  *  }
  */
 function drawSchedule(what, parent, settings) {
-  let data = settings.data;
-  let create = data === false ? parent : parent.selectAll(what);
-  let keys = Object.keys(settings.is);
-  let len = keys.length;
-  let is = settings.is;
-  let applyArgs = undefined;
-  let dataBinder = undefined;
+  var data = settings.data,
+      is = settings.is;
 
-  if (!(data instanceof Array 
-        && data[1] instanceof Function)){
+  var applyArgs = undefined;
+  var dataBinder = undefined;
+
+  parent = data === false ? parent : parent.selectAll(what);
+
+  if (!(data instanceof Array && data[1] instanceof Function)) {
     applyArgs = [data];
   } else {
     applyArgs = data;
   }
 
   if (data) {
-    dataBinder = () => {
-      return create.data.apply(create, applyArgs);
+    dataBinder = function dataBinder() {
+      return parent.data.apply(parent, applyArgs);
     };
   } else {
-    dataBinder = () => {
-      return create;
+    dataBinder = function dataBinder() {
+      return parent;
     };
   }
 
   return {
-    type: PRE_BIND,
-    // if problems up comment this out
-    // parent: create,
-    dataBinder,
-    is,
-    keys,
-    len
+    type: _globalKeys.PRE,
+    bind: { dataBinder: dataBinder },
+    is: is
   };
 }
 
-/**
- * load-> create a series of transition to occur in your visualization. 
- * Each one will happen after the pervious one completes.
- *  
- * @param{Object} (transitions) -> any number of object created by
- *   a drawSchedule function
- */
-function load(...transitions){
+function load(stringId) {
+  // preprocess the transitions
+  var key = (0, _id2.default)(stringId);
 
-  queueSubject.onNext({
-    type: LOAD,
-    time: Date.now(),
-    transitions
-  });
+  for (var _len = arguments.length, transitions = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    transitions[_key - 1] = arguments[_key];
+  }
 
-  return transitions;
+  _pipeline.schQ.loader(transitions, key);
 }
 
-export { drawSchedule, load };
+exports.drawSchedule = drawSchedule;
+exports.load = load;

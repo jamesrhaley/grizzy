@@ -19,6 +19,7 @@ import {filterStream} from './mainStream';
 String.prototype.capitalizeFirstLetter = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
+
 //sideffects---------------------------------------------------------
 
 ReactDOM.render(
