@@ -1,7 +1,20 @@
 import draw from './main/draw';
 import dimensions from './main/dimensions';
 import blankSVG from './main/blankSVG';
-import {drawSchedule} from './main/scheduler/scheduler';
-import {load} from './main/scheduler/scheduler';
+import { 
+  drawSchedule,
+  drawComplete,
+  load,
+  subscription
+} from './main/scheduler/index';
 
-export {blankSVG, draw, drawSchedule, dimensions, load};
+
+export {
+  blankSVG,
+  draw, 
+  drawSchedule,
+  drawComplete,
+  dimensions,
+  load,
+  subscription
+};

@@ -7,7 +7,7 @@ import {
   LEGEND_DELAY_TIME
 } from './style'
 
-import {drawSchedule} from '../scheduler/scheduler';
+import { drawSchedule } from '../../lib/index';
 
 const delay = function(d, i) { return i * LEGEND_DELAY_TIME; };
 

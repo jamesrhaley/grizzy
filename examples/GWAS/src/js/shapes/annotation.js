@@ -1,11 +1,10 @@
-import grizzy from 'grizzy';
 import { 
   TEXT_STYLE,
   ANNOTATION_SPACING,
   ANNOTATION_TEXT_ATTR
 } from './style'
+import { drawSchedule } from '../../lib/index';
 
-import {drawSchedule} from '../scheduler/scheduler';
 
 
 const MARGIN_TOP = '.8em'

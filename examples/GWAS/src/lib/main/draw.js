@@ -1,3 +1,8 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 /**
  * draw:
  * manages the heavy lifing of d3 by creating  a reusable pattern to 
@@ -47,11 +52,11 @@
  * });
  */
 function draw(what, parent, settings) {
-  let data = settings.data;
-  let create = data === false ? parent : parent.selectAll(what);
-  let keys = Object.keys(settings.is);
-  let len = keys.length;
-  let applyArgs;
+  var data = settings.data;
+  var create = data === false ? parent : parent.selectAll(what);
+  var keys = Object.keys(settings.is);
+  var len = keys.length;
+  var applyArgs = void 0;
 
   // I do not believe that I have actually covered all cases
   if (!(data instanceof Array && data[1] instanceof Function)) {
@@ -64,10 +69,10 @@ function draw(what, parent, settings) {
     create = create.data.apply(create, applyArgs);
   }
 
-  for (let i = 0; i < len; i++) {
-    create.call(settings.is[ keys[i] ]);  
+  for (var i = 0; i < len; i++) {
+    create.call(settings.is[keys[i]]);
   }
   return create;
 }
 
-export default draw;
+exports.default = draw;

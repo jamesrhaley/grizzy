@@ -1,5 +1,4 @@
-import grizzy from 'grizzy';
-import {drawSchedule} from '../scheduler/scheduler';
+import { drawSchedule } from '../../lib/index';
 
 const TRANSITION_TIME = 100;
 const PADDING_LEFT = 1
@@ -10,7 +9,6 @@ function axis(selection, SIZE, xAxis, yAxis) {
   return drawSchedule(".y.axis", selection, {
     data: false,
     is: {
-
       update: (selection, done) => {
         return selection.transition()
           .duration(TRANSITION_TIME)

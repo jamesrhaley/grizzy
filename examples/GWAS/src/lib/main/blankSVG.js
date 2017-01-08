@@ -1,3 +1,8 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 /**
 * blankSVG: Creates a new, blank SVG to perform d3 methods on.
 *
@@ -23,28 +28,12 @@
 function blankSVG(d3local, size, select) {
   select = select !== undefined ? select : 'body';
   // console.log(select)
-  return d3local.select(select)
-    .append('svg')
-    .attr({
-      'width' : (
-        size.width 
-        + size.margin.left 
-        + size.margin.right
-      ),
-      'height' : (
-        size.height
-        + size.margin.top
-        + size.margin.bottom
-      )
-    })
-    .append('g')
-      .attr({
-        'transform': 'translate(' 
-          + size.margin.left 
-          + ',' 
-          + size.margin.top 
-          + ')'
-      });
+  return d3local.select(select).append('svg').attr({
+    'width': size.width + size.margin.left + size.margin.right,
+    'height': size.height + size.margin.top + size.margin.bottom
+  }).append('g').attr({
+    'transform': 'translate(' + size.margin.left + ',' + size.margin.top + ')'
+  });
 }
 
-export default blankSVG;
+exports.default = blankSVG;

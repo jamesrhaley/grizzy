@@ -33,6 +33,7 @@
 
 /**
 * Queue -> very very basic queue
+* @ignore
 */
 export class Queue {
   constructor() {
@@ -66,6 +67,9 @@ export class Queue {
 //   }
 // }
 
+/**
+* @ignore
+*/
 export function isEmpty(obj) {
   return Object.keys(obj).length === 0 ||
     obj.length === 0;
