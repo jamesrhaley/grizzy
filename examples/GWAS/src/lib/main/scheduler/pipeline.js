@@ -25,7 +25,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * drawComplete:
  *  When you need to know when the asynchronous sequence you have created 
  *  has ended.  This will only fire when every step completes, but not 
- *  when load is called interupting a sequence midway through.
+ *  when load is called interrupting a sequence midway through.
  *  
  * @returns {Observable} - subscription to final event of sequence.
  * @example
@@ -66,6 +66,7 @@ var schQ = new _schq.SchQ({
 });
 
 var running = schQ.run();
+
 /**
  * drawComplete:
  *  a disposable to dispose of a load sequence if you wish to remove it 

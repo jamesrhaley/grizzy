@@ -18,15 +18,11 @@ var _moduleKeys = (0, _moduleKeys3.default)(),
 // views are in this case where the side effects are.  This is where
 // d3 either is binding data to the DOM or rendering updates
 
-// binds data to the dom if any and returns the parent object
+// binds data to the DOM if any and returns the parent object
 // to apply transitions on.
 
 
-function dataView(state) {
-  var message = state.message,
-      next = state.next,
-      emitter = state.emitter;
-
+function dataView(message, next, emitter) {
   var binderArray = next.value;
   var key = message.key;
   var parent = binderArray.map(function (binder) {
@@ -67,16 +63,12 @@ function callNext(emitter, key, parent) {
 
 // render function renders a view or if pushes onNext to
 // loadSubject if there is none to render
-function renderView(state) {
-  var message = state.message,
-      next = state.next,
-      emitter = state.emitter;
-
+function renderView(message, next, emitter) {
   var stack = next.value;
-  var events = message.events,
+  var previous = message.previous,
       key = message.key;
 
-  var parent = events[0].parent;
+  var parent = previous[0].parent;
 
   stack.forEach(function (transition) {
     var packEmitter = callNext(emitter, key, parent);
@@ -93,13 +85,18 @@ function renderView(state) {
  * @ignore
  */
 function render(state) {
-  if (state.next.type === BIND) {
-    dataView(state);
-  } else if (state.next.type === RENDER) {
+  var message = state.message,
+      next = state.next,
+      emitter = state.emitter;
+
+
+  if (next.type === BIND) {
+    dataView(message, next, emitter);
+  } else if (next.type === RENDER) {
     // should break down what this is variable wise
-    renderView(state);
-  } else if (state.next.type === FINISH) {
-    state.next.value();
+    renderView(message, next, emitter);
+  } else if (next.type === FINISH) {
+    next.value();
   } else {
     // error should be passed to rxjs
     var str = 'view in view.js is receiving an undefied object fix this';

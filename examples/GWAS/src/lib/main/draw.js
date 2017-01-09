@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 /**
  * draw:
- * manages the heavy lifing of d3 by creating  a reusable pattern to 
+ * manages the heavy lifting of d3 by creating  a reusable pattern to 
  * create graphics.  Note: if setting.data is `false` parent object will 
  * bind only.
  *

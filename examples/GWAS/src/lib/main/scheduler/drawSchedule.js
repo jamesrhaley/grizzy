@@ -30,8 +30,8 @@ var _moduleKeys = (0, _moduleKeys3.default)(),
  *  load('barAnimation', axis, bar);
  *  ```
  *
- *  The big differnece is there needs to be a second argument to pass to 
- *  the function durring rendering.  Under the hood an event listener is
+ *  The big difference is there needs to be a second argument to pass to 
+ *  the function during rendering.  Under the hood an event listener is
  *  used to know when the function completes asynchronously. Notice in the
  *  main example the following code.
  *  ```
@@ -49,11 +49,11 @@ var _moduleKeys = (0, _moduleKeys3.default)(),
  * @see {@link load}
  *
  * @param {String} what - what will be picked in the selection 
- * @param {D3Object} parent - the svg that will be render new images
+ * @param {D3Object} parent - the SVG that will be render new images
  * @param {Object} settings - All of the functionality of the view of
  *   component. must include properties data, and is.
  * @return {Object} this is description.
- * @property {String} string type used interally
+ * @property {String} string type used internally
  * @property {Function} bind function that will bind or not bind data to 
  *  the DOM
  * @property {Object} is functions render DOM nodes with D3 
