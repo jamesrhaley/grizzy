@@ -1,6 +1,6 @@
 {
   "name": "grizzy",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "common visualization functionality",
   "main": "dist/index.js",
   "scripts": {
@@ -31,7 +31,7 @@
   "dependencies": {
     "d3": "3.5.15",
     "rx": "4.1.0",
-    "schq": "0.2.2"
+    "schq": "1.0.1"
   },
   "devDependencies": {
     "babel-cli": "6.18.0",

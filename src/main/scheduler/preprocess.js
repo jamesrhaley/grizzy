@@ -30,7 +30,7 @@ const isAllFunctions = baseAllCheck(isFunction);
 //const isAllPlainObject = baseAllCheck(isPlainObject);
 
 /**
- * object is nested two level deep. turns all into single obects
+ * object is nested two level deep. turns all into single objects
  * and flattens into a single array
  * @private
  * @param {Object} data - an object created by drawShedule
