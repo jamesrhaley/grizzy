@@ -1,9 +1,7 @@
 import {draw} from 'grizzy';
 
 function bar(parent, data, helpers){
-  let size = helpers.SIZE;
-  let x = helpers.x;
-  let y = helpers.y;
+  let {SIZE, x, y} = helpers;
 
   return draw('.bar', parent, {
     data: data,
@@ -15,8 +13,8 @@ function bar(parent, data, helpers){
             'x': (d) => x(d.letter),
             'width': x.rangeBand(),
             'y': (d) => y(d.frequency),
-            'height': (d) => size.height - y(d.frequency)
-        });
+            'height': (d) => SIZE.height - y(d.frequency)
+          });
 
       }
     }

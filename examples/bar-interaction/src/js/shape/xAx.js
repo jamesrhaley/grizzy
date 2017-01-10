@@ -1,29 +1,39 @@
 import {draw} from 'grizzy';
 
 let start = true;
+
 function xAx(parent, helpers){
-  let xAxis = helpers.xAxis;
-  let height = helpers.SIZE.height;
-  // console.log()
+  let {xAxis, SIZE, delay} = helpers;
+
   return draw('x axis', parent, {
     data: false,
     is:{
+      update: (selection) => {
+        selection.transition()
+          .duration(750)
+          .select(".x.axis")
+          .call(xAxis)
+          .selectAll("g")
+          .delay(delay)
+      },
       enter: (selection)=> {
-        let axis = selection
+        let axis = selection;
+
         if (start) {
             start = false;
 
         axis.append('g')
           .attr({
             'class': 'x axis',
-            'transform': 'translate(0,' + height + ')'
+            'transform': 'translate(0,' + SIZE.height + ')'
           })
           .call(xAxis);
         }
-        return axis
+
+        return axis;
       }
     }
-  })
+  });
 }
 
 export {xAx};

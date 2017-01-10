@@ -1,12 +1,8 @@
-
-import grizzy, * as gz from 'grizzy';
+import {dimensions, blankSVG} from 'grizzy';
 import {bar} from './shape/bar';
 import {xAx} from './shape/xAx';
 import {yAx} from './shape/yAx';
 
-const dimensions = gz.dimensions;
-const blankSVG = gz.blankSVG;
-const load = gz.load;
 
 const BASE_DIMENSIONS = {
     width : 960,
@@ -41,11 +37,11 @@ function graph(data) {
   x.domain(data.map((d) => d.letter));
   y.domain([0, d3.max(data, (d) => d.frequency)]);
 
-  load(
-    bar(svg, data, {SIZE,x,y}),
-    yAx(svg, {yAxis}),
-    xAx(svg, {SIZE, xAxis})
-  );
+  xAx(svg, {SIZE, xAxis});
+
+  yAx(svg, {yAxis});
+
+  bar(svg, data, {SIZE, x, y})
 }
 
 export {graph}

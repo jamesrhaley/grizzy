@@ -1,4 +1,3 @@
-
 import {dimensions, blankSVG} from 'grizzy';
 import {bar} from './shape/bar';
 import {xAx} from './shape/xAx';
@@ -16,6 +15,8 @@ const SIZE = dimensions(BASE_DIMENSIONS);
 const svg = blankSVG(d3, SIZE, '#chart');
 
 // helpers
+var formatPercent = d3.format(".0%");
+
 const x = d3.scale.ordinal()
   .rangeRoundBands([0, SIZE.width], .1);
 
@@ -30,19 +31,30 @@ const xAxis = d3.svg.axis()
 const yAxis = d3.svg.axis()
   .scale(y)
   .orient('left')
-  .ticks(10, '%');
+  .ticks(10, '%')
+  .tickFormat(formatPercent);
 
+const delay = (d, i) => i * 50;
 
-function graph(data) {
+function graph(state) {
+  let {data, evt} = state;
+  let sortFunc = evt
+      ? (a, b) => b.frequency - a.frequency
+      : (a, b) => d3.ascending(a.letter, b.letter)
 
-  x.domain(data.map((d) => d.letter));
-  y.domain([0, d3.max(data, (d) => d.frequency)]);
+  // sort data based off of event
+  data.sort(sortFunc);
 
-  xAx(svg, {SIZE, xAxis});
+  // set the x and y domain
+  x.domain(data.map((d) => d.letter))
+  y.domain([0, d3.max(data, (d) => d.frequency)])
+
+  // render the graph
+  xAx(svg, {SIZE, xAxis, delay});
 
   yAx(svg, {yAxis});
 
-  bar(svg, data, {SIZE,x,y})
+  bar(svg, data, {SIZE, x, y, delay});
 }
 
 export {graph}
