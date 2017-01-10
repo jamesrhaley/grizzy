@@ -1,13 +1,16 @@
 import {draw} from 'grizzy';
 
 let start = true;
+
 function yAx(parent, helpers){
-  let yAxis = helpers.yAxis;
+  let {yAxis} = helpers;
+
   return draw('x axis', parent, {
     data: false,
-    is:{
+    is: {
       enter: (selection)=> {
-        let axis = selection
+        let axis = selection;
+
         if (start) {
             start = false;
 
@@ -29,7 +32,7 @@ function yAx(parent, helpers){
         return axis;
       }
     }
-  })
+  });
 }
 
 export {yAx};

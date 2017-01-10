@@ -1,6 +1,7 @@
 
 import {dimensions, blankSVG, load} from 'grizzy';
-import {lineChart, annotation} from './shape/lines';
+import lineChart from './shape/lines';
+import annotation from './shape/annotation';
 import {xAx} from './shape/xAx';
 import {yAx} from './shape/yAx';
 
@@ -38,6 +39,7 @@ var line = d3.svg.line()
     .x((d) => x(d.date))
     .y((d) => y(d.temperature));
 
+
 function graph(state) {
   const {cities, cityLabels, keys, xDomain, yDomain} = state
 
@@ -50,6 +52,7 @@ function graph(state) {
   yAx(svg, {yAxis});
 
   load(
+    'lineChart',
     lineChart(svg, cities, {line, color, x, y}),
     annotation(svg, cityLabels, {x,y})
   );
