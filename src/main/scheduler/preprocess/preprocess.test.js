@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import moduleKeys from './moduleKeys';
+import moduleKeys from './../moduleKeys';
 import preprocess from './preprocess';
 import isPlainObject from 'lodash/isPlainObject';
 import isArray from 'lodash/isArray';
@@ -109,6 +109,24 @@ describe('preprocess', () => {
 
     it('Should have a length of 4', () => {
       expect( result4.length ).to.equal(4);
+    });
+  });
+
+  describe('Test 6', () => {
+    let result5 = preprocess([[group3, group3], group3]);
+ 
+    it('Should be an array', () => {
+      expect( isArray( result5 ) ).to.be.true;
+    });
+
+    it('Should have a length of 8', () => {
+      expect( result5.length ).to.equal(8);
+    });
+  });
+
+  describe('Test 7', () => {
+    it('Should throw', () => {
+      expect( () => preprocess(['a']) ).to.throw(/Object or Function/);
     });
   });
 });

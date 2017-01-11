@@ -70,10 +70,10 @@ function renderView(message, next, emitter) {
 
   var parent = previous[0].parent;
 
-  stack.forEach(function (transition) {
-    var packEmitter = callNext(emitter, key, parent);
+  stack.forEach(function (transition, i) {
+    var readyEmitter = callNext(emitter, key, parent);
 
-    parent[0].call(transition, packEmitter);
+    parent[i].call(transition, readyEmitter);
   });
 }
 

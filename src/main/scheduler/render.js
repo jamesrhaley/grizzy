@@ -50,12 +50,13 @@ function callNext(emitter, key, parent) {
 function renderView(message, next, emitter) {
   let stack = next.value;
   let {previous, key} = message;
+  // if the parent lookup gets more complicated start here
   let parent = previous[0].parent;
 
-  stack.forEach(transition => {
-    let packEmitter = callNext(emitter, key, parent);
+  stack.forEach((transition, i) => {
+    let readyEmitter = callNext(emitter, key, parent);
 
-    parent[0].call(transition, packEmitter);        
+    parent[i].call(transition, readyEmitter);        
   });
 }
 

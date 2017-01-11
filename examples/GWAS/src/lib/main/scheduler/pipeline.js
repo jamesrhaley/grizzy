@@ -11,7 +11,7 @@ var _rx = require('rx');
 
 var _rx2 = _interopRequireDefault(_rx);
 
-var _preprocess = require('./preprocess');
+var _preprocess = require('./preprocess/preprocess');
 
 var _preprocess2 = _interopRequireDefault(_preprocess);
 
