@@ -1,6 +1,6 @@
 {
   "name": "grizzy",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "common visualization functionality",
   "main": "dist/index.js",
   "scripts": {
@@ -8,6 +8,7 @@
     "build": "npm-run-all --parallel build:*",
     "build:main": "babel --copy-files --out-dir dist --ignore *.test.js src",
     "build:GWAS": "babel --copy-files --out-dir examples/GWAS/src/lib --ignore *.test.js src",
+    "build:bar": "babel --copy-files --out-dir examples/bar-schedule/src/lib --ignore *.test.js src",
     "build:umd": "webpack --output-filename grizzy.js",
     "build:umd.min": "webpack --output-filename grizzy.min.js -p",
     "postbuild": "rm dist/main/loadVars.pretest.js",

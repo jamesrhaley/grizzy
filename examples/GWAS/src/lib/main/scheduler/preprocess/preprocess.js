@@ -98,7 +98,7 @@ function formCollection(data) {
       value: data
     }];
   } else {
-    throw new Error('must be Object or Function');
+    throw new TypeError('must be Object or Function');
   }
 }
 /**

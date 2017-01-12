@@ -37,13 +37,24 @@ export function byKeyOrder(isObjectsArray, stringType){
         isObjectsArray.map( obj => 
           ({
             type: stringType,
-            value: obj[key]
+            value: [obj[key]]
           })
         )
       )
     );
 
-    return result[0];
+    const merged = result[0].map(arr => {
+      return arr.reduce((pre, curr) => {
+        if(Object.keys(pre).length === 0) {
+          return curr;
+        } else {
+          let value = pre.value.concat(curr.value);
+          return Object.assign({}, pre, {value});
+        }
+      }, {});
+    });
+
+    return merged;
   }
 
   else {
@@ -57,10 +68,14 @@ export function byKeyOrder(isObjectsArray, stringType){
  * @param {Array} drawScheduleObjectArray - array of that
  */
 export function manyDrawObjects(drawSchObjectArray) {
-  // console.log('hellowwwww',drawSchObjectArray)
   const bindArray = drawSchObjectArray.map(drawSchObj => drawSchObj.bind);
+  
   const renderArray = drawSchObjectArray.map(drawSchObj => drawSchObj.is);
+  
+  const orderedBindArray = byKeyOrder(bindArray, BIND);
 
-  return byKeyOrder(bindArray, BIND)
-    .concat(byKeyOrder(renderArray, RENDER));
+  const orderedRenderArray = byKeyOrder(renderArray, RENDER);
+
+  return orderedBindArray
+    .concat(orderedRenderArray );
 }

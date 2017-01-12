@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import moduleKeys from './../moduleKeys';
 import { byKeyOrder, manyDrawObjects } from './manyDrawObjects';
+import isArray from 'lodash/isArray';
 
 const { PRE, BIND, RENDER } = moduleKeys();
 
@@ -34,18 +35,25 @@ const group3 = {
 };
 
 describe('byKeyOrder', function() {
-  let arrayOfIs = byKeyOrder( [group1.is, group2.is] );
+  let arrayOfIs = byKeyOrder( [group1.is, group2.is], RENDER );
 
   it('should return an array of arrays with a length of 2', () => {
     expect( arrayOfIs.length ).to.equal( 2 );
   });
 
+  it('each index schould have an string type of render', () => {
+    expect( arrayOfIs[0].type ).to.equal( RENDER );
+    expect( arrayOfIs[1].type ).to.equal( RENDER );
+  });
+
+  it('each value should be an array', () => {
+    expect( isArray(arrayOfIs[0].value) ).to.be.true;
+    expect( isArray(arrayOfIs[1].value) ).to.be.true;
+  });
+
   it('the return of the objects should be [[1,2],[1,2]]', () => {
-    const mappedValue = arrayOfIs.map(arr => 
-      arr.map(obj => 
-        obj.value()
-      )
-    );
+    const mappedValue = arrayOfIs.map(obj => 
+      obj.value.map(fn => fn()));
 
     expect( mappedValue ).to.eql( [[1,2],[1,2]] );
   });
@@ -61,36 +69,18 @@ describe('manyDrawObjects', function() {
 /**
  * what object should look like
  * let shouldBe = [
- *   [
- *     {
- *       type: BIND,
- *       value: mock(1)
- *     },
- *     {
- *       type: BIND,
- *       value: mock(2)
- *     }
- *   ],
- *   [
- *     {
- *       type: RENDER,
- *       value: mock(1)
- *     },
- *     {
- *       type: RENDER,
- *       value: mock(2)
- *     }
- *   ],
- *   [
- *     {
- *       type: RENDER,
- *       value: mock(1)
- *     },
- *     {
- *       type: RENDER,
- *       value: mock(2)
- *     }
- *   ]
+ *   {
+ *     type: BIND,
+ *     value: [mock(1),mock(2)]
+ *   },
+ *   {
+ *     type: RENDER,
+ *     value: [mock(1), mock(2)]
+ *   },
+ *   {
+ *     type: RENDER,
+ *     value: [mock(1), mock(2)]
+ *   }
  * ];
  */
   let many = manyDrawObjects([group1, group2]);
@@ -100,20 +90,14 @@ describe('manyDrawObjects', function() {
   });
 
   it('stringTypes should be right', function() {
-    expect( many[0][0].type === BIND ).to.be.true;
-    expect( many[0][1].type === BIND ).to.be.true;
-    expect( many[1][0].type === RENDER ).to.be.true;
-    expect( many[1][1].type === RENDER ).to.be.true;
-    expect( many[2][0].type === RENDER ).to.be.true;
-    expect( many[2][1].type === RENDER ).to.be.true;
+    expect( many[0].type === BIND ).to.be.true;
+    expect( many[1].type === RENDER ).to.be.true;
+    expect( many[2].type === RENDER ).to.be.true;
   });
 
   it('the return of the objects should be [[1,2],[1,2], [1,2]]', () => {
-    const mappedValue = many.map(arr => 
-      arr.map(obj => 
-        obj.value()
-      )
-    );
+    const mappedValue = many.map(obj => 
+      obj.value.map(fn => fn()));
 
     expect( mappedValue ).to.eql( [[1,2],[1,2], [1,2]] );
   });

@@ -5,9 +5,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = preprocess;
 
-var _moduleKeys2 = require('./moduleKeys');
+var _moduleKeys2 = require('./../moduleKeys');
 
 var _moduleKeys3 = _interopRequireDefault(_moduleKeys2);
+
+var _manyDrawObjects = require('./manyDrawObjects');
 
 var _isPlainObject = require('lodash/isPlainObject');
 
@@ -55,6 +57,7 @@ var baseAllCheck = function baseAllCheck(fn) {
 /** loop an array and see if all instance are Functions */
 var isAllFunctions = baseAllCheck(_isFunction2.default);
 
+var isAllPre = baseAllCheck(isPre);
 //const isAllPlainObject = baseAllCheck(isPlainObject);
 
 /**
@@ -85,12 +88,17 @@ function formCollection(data) {
   if (isPre(data)) {
 
     return fromDrawObject(data);
+  } else if (data.length > 1 && isAllPre(data)) {
+
+    return (0, _manyDrawObjects.manyDrawObjects)(data);
   } else if ((0, _isArray2.default)(data) && isAllFunctions(data)) {
 
     return [{
       type: RENDER,
       value: data
     }];
+  } else {
+    throw new TypeError('must be Object or Function');
   }
 }
 /**
