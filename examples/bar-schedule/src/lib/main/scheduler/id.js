@@ -6,6 +6,9 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = id;
 var idCount = 0;
 
+/**
+ * @ignore
+ */
 function id(key) {
-  return key + idCount++;
+  return key === undefined ? "gz" + idCount++ : "key" + idCount++;
 }

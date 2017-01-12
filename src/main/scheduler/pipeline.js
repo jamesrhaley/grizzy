@@ -1,6 +1,6 @@
 import { SchQ } from 'schq';
 import Rx from 'rx';
-import preprocess from './preprocess';
+import preprocess from './preprocess/preprocess';
 import render from './render';
 
 /**

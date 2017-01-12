@@ -3,8 +3,11 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.globalKeys = globalKeys;
-function globalKeys() {
+exports.default = moduleKeys;
+/**
+* @ignore
+*/
+function moduleKeys() {
   return {
     PRE: 'pre',
     BIND: 'bind',

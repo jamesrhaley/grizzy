@@ -10,14 +10,17 @@ const { BIND, RENDER, FINISH } = moduleKeys();
 function dataView(message, next, emitter){
   let binderArray = next.value;
   let key = message.key;
-  let parent = binderArray.map(binder => binder());
+  let parents = binderArray.map(binder => binder());
 
-  let packet = {
-    type: BIND,
-    parent: parent
-  };
+  parents.forEach((parent, index) => {
+    let packet = {
+      type: BIND,
+      parent: [parent],
+      index
+    };
 
-  emitter.emit(key, packet);
+    emitter.emit(key, packet);
+  });
 }
 
 
@@ -50,12 +53,13 @@ function callNext(emitter, key, parent) {
 function renderView(message, next, emitter) {
   let stack = next.value;
   let {previous, key} = message;
+  // if the parent lookup gets more complicated start here
   let parent = previous[0].parent;
 
-  stack.forEach(transition => {
-    let packEmitter = callNext(emitter, key, parent);
+  stack.forEach((transition, i) => {
+    let readyEmitter = callNext(emitter, key, parent);
 
-    parent[0].call(transition, packEmitter);        
+    parent[i].call(transition, readyEmitter);        
   });
 }
 
@@ -69,6 +73,23 @@ function renderView(message, next, emitter) {
  */
 function render(state) {
   let {message, next, emitter} = state;
+
+  // rewrite this
+  if (message.previous !== undefined && message.previous.length > 1 && message.previous[0].type === BIND) {
+    let result = [];
+    message.previous.forEach(obj => {
+      if (result.length === 0) {
+        result.push(obj);
+      }
+      else {
+        let mergedParents = result[0].parent.concat(obj.parent);
+
+        result[0].parent = mergedParents;
+      }
+    });
+
+    message.previous = result;
+  }
 
   if (next.type === BIND) {
     dataView(message, next, emitter);

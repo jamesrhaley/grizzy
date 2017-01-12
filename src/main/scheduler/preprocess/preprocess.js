@@ -1,4 +1,5 @@
-import moduleKeys from './moduleKeys';
+import moduleKeys from './../moduleKeys';
+import { manyDrawObjects } from './manyDrawObjects';
 import isPlainObject from 'lodash/isPlainObject';
 import isFunction from 'lodash/isFunction';
 import isArray from 'lodash/isArray';
@@ -27,6 +28,7 @@ const baseAllCheck = (fn) => {
 /** loop an array and see if all instance are Functions */
 const isAllFunctions = baseAllCheck(isFunction);
 
+const isAllPre = baseAllCheck(isPre);
 //const isAllPlainObject = baseAllCheck(isPlainObject);
 
 /**
@@ -57,8 +59,14 @@ function formCollection(data) {
   if ( isPre(data) ) {
 
     return fromDrawObject(data);
+  }
 
-  } else if ( isArray(data) && isAllFunctions(data) ) {
+  else if ( data.length > 1 && isAllPre(data) ) {
+
+    return manyDrawObjects(data);
+  }
+
+  else if ( isArray(data) && isAllFunctions(data) ) {
     
     return [
       {
@@ -66,6 +74,10 @@ function formCollection(data) {
         value: data
       }
     ];
+  }
+
+  else {
+    throw new TypeError('must be Object or Function');
   }
 }
 /**
