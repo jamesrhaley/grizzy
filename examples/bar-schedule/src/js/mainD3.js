@@ -57,10 +57,6 @@ function graph(state) {
   y.domain([0, d3.max(graphData, (d) => d.frequency)])
 
   // render the graph
-  
-
-  
-
   load(
     'barGraph',
     yAx(svg, {yAxis}),
