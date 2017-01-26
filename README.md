@@ -1,6 +1,8 @@
 # Welecome to Grizzy
 
-Grizzy is a better way to organize your D3](https://d3js.org) code and create meaningful transitions without the pain of callback hell. Following the lead of React and D3 gizzy encourages a user to write push base code. Please read the doc for more understanding, but if you are familiar with d3 you will be ready to use grizzy. Under the hood grizzy uses Observables from [RxJS](https://github.com/Reactive-Extensions/RxJS), so if you like RxJS to deal with your asynchronous code you are going to like grizzy even more.
+Grizzy is a better way to organize your [D3](https://d3js.org) code.  It is not a framework.  It does not reinvent D3.  It does not change your application or try to take over parts of your app that handles your model, ajax, or anything you might find to be obtrusive. If follows patterns It is about simplifying what parts of d3 to use while push based design approach.  While setting this constraints, grizzy with all allow you to create meaningful transitions without the pain of callback hell.
+
+Following the lead of React and D3 gizzy encourages a user to write push base code. Please read the doc for more understanding, but if you are familiar with d3 you will be ready to use grizzy. Under the hood grizzy uses Observables from [RxJS](https://github.com/Reactive-Extensions/RxJS), so if you like RxJS to deal with your asynchronous code you are going to like grizzy even more.
 
 All d3 functions follow the convention of the following
 
