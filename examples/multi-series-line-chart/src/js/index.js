@@ -1,5 +1,5 @@
 import { Rx } from 'rx';
-import drip from './drip'
+import drip from './drip';
 import model from './model';
 import graph from './mainD3';
 
