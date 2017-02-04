@@ -6,15 +6,15 @@ import { dropDownMenu } from './dropDown/main';
 let init = false;
 
 function dashboard(baseData, groupsForPieData, allVals, stateById) {
-    if (!init) {
-      dropDownMenu(baseData, stateById);
+  if (!init) {
+    dropDownMenu(baseData, stateById);
 
-      init = true;
-    }
+    init = true;
+  }
 
-    barGraph(baseData, stateById);
+  barGraph(baseData, stateById);
 
-    pieGraph(groupsForPieData, allVals);
+  pieGraph(groupsForPieData, allVals);
 }
 
 export { dashboard };
