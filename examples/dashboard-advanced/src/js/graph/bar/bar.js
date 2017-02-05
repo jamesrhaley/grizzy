@@ -1,12 +1,12 @@
-import { draw } from 'grizzy';
+import { drawSchedule } from 'grizzy';
 
 function bar(parent, data, helpers){
   let {SIZE, y} = helpers;
 
-  return draw('.bar', parent, {
+  return drawSchedule('.bar', parent, {
     data: data,
     is:{
-      enter: (selection) => {
+      enter: (selection, done) => {
         return selection.enter().append('rect')
           .attr({
             'class': 'bar',
@@ -15,12 +15,14 @@ function bar(parent, data, helpers){
             'y': (d) => SIZE.height,
             'height': 0
           })
-          .style('fill', '#aaa');
+          .style('fill', '#8a89a6')
+          .call(done)
       },
-      update: (selection) => {
+      update: (selection, done) => {
         return selection.transition()
           .attr('y', (d) => y(d.total))
-          .attr('height', (d) => y(0) - y(d.total));
+          .attr('height', (d) => y(0) - y(d.total))
+          .call(done)
       }
     }
   });
