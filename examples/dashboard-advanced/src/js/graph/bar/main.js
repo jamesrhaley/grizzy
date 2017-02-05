@@ -1,5 +1,6 @@
 import {dimensions, blankSVG} from 'grizzy';
 import {bar} from './bar';
+import { setOpacity } from '../helpers';
 
 const DIMENSIONS = {
     width : 80,
@@ -12,6 +13,8 @@ const SIZE = dimensions(DIMENSIONS);
 const barSvg = blankSVG(d3, SIZE);
 
 let init = false;
+
+let setBarOpacity = setOpacity(barSvg, '.bar');
 
 function barGraph(data, stateById) {
 
@@ -33,7 +36,7 @@ function barGraph(data, stateById) {
       init = true;
     }
 
-    bar(barSvg, [data], {SIZE, y});
+    return bar(barSvg, [data], {SIZE, y});
 }
 
-export {barGraph};
+export {barGraph, setBarOpacity};

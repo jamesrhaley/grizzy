@@ -13,17 +13,19 @@ function prePie(parent, data, helpers){
     is:{
       enter: (selection) => {
         return selection.enter()
-          .append("path")
-          .attr({'class': 'arc'})
-          .attr({'d': arc})
-          .style("fill", (d) => color(d.data.id))
+          .append('path')
+          .attr({
+            'class': 'arc',
+            'd': arc
+          })
+          .style('fill', (d) => color(d.data.id))
           .each(function() { 
             this._current = {startAngle: 0, endAngle: 0}; 
           });
       },
       update: (selection) => {
         return selection.transition().duration(1000)
-          .attrTween("d", function(d) {
+          .attrTween('d', function(d) {
             
             var interpolate = d3.interpolate(this._current, d);
             // bind new data to parent
